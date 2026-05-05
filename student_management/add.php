@@ -4,7 +4,7 @@
 $host = 'localhost';
 $user = 'root';
 $password = '';
-$database = 'student_management';
+$database = 'Student_Record_System';
 
 $mysqli = new mysqli($host, $user, $password, $database);
 if ($mysqli->connect_error) {
