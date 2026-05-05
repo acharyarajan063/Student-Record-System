@@ -1,11 +1,6 @@
-
-
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,61 +11,63 @@
 
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<div class="container">
+  <div class="container">
 
-  <!-- LEFT SIDE -->
-  <div class="left">
-    <div class="left-content">
+    <!-- LEFT SIDE -->
+    <div class="left">
+      <div class="left-content">
 
-      <h1>Welcome To</h1>
-      <p>Educare Institute of Technology</p>
-      <span>Manage students, attendance, and courses easily.</span>
+        <h1>Welcome To</h1>
+        <p>Educare Institute of Technology</p>
+        <span>Manage students, attendance, and courses easily.</span>
+      </div>
     </div>
-  </div>
 
-  <!-- RIGHT SIDE -->
-  <div class="right">
+    <!-- RIGHT SIDE -->
+    <div class="right">
 
-    <!-- LOGO -->
-    
-    <div class="form-box">
-      <h2>Login</h2>
-<form method="POST" action="login.php">
+      <!-- LOGO -->
 
-  <label>Username</label>
-  <input type="text" name="username" placeholder="Enter username" required>
+      <div class="form-box">
+        <h2>Login</h2>
+        <<!-- Login Form -->
+          <form method="POST" action="login.php">
 
-  <label>Password</label>
-  <div class="password-box">
-    <input type="password" name="password" id="password" placeholder="Enter password" required>
-    <span onclick="togglePassword()">👁</span>
-  </div>
+            <!-- Email input (matches database) -->
+            <label>Email</label>
+            <input type="text" name="email" placeholder="Enter email" required>
 
-  <div class="options">
-    <label><input type="checkbox"> Remember me</label>
-    <a href="#">Forgot password?</a>
-  </div>
+            <!-- Password input -->
+            <label>Password</label>
+            <div class="password-box">
+              <input type="password" name="password" id="password" placeholder="Enter password" required>
+              <span onclick="togglePassword()">👁</span>
+            </div>
 
-  <button type="submit">Login</button>
+            <!-- Options -->
+            <div class="options">
+              <label><input type="checkbox"> Remember me</label>
+              <a href="#">Forgot password?</a>
+            </div>
 
-  <p class="register">
-    Don’t have an account? <a href="#">Register</a>
-  </p>
+            <!-- Submit -->
+            <button type="submit">Login</button>
 
-</form>
+          </form>
+      </div>
 
-  </div>
+    </div>
 
-</div>
-
-<script>
-function togglePassword() {
-  const pass = document.getElementById("password");
-  pass.type = pass.type === "password" ? "text" : "password";
-}
-</script>
+    <script>
+      function togglePassword() {
+        const pass = document.getElementById("password");
+        pass.type = pass.type === "password" ? "text" : "password";
+      }
+    </script>
 
 </body>
+
 </html>
