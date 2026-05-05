@@ -1,60 +1,47 @@
 <?php
+// Enable error reporting (development only)
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
+// Include database connection
 require_once "database/db.php";
 
+// Start session
 session_start();
 
-/*
-|--------------------------------------------------------------------------
-| CHECK IF FORM IS SUBMITTED
-|--------------------------------------------------------------------------
-*/
+// Check if form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    // Get form data safely
-    $username = $_POST['username'] ?? '';
+    // Get input values
+    $email = $_POST['email'] ?? '';
     $password = $_POST['password'] ?? '';
 
-    // Basic validation
-    if (empty($username) || empty($password)) {
-        echo "Please fill all fields";
-        exit();
-    }
+    // Validate inputs
+   if (empty($email) || empty($password)) {
+    header("Location: index.php?error=empty");
+    exit();
+}
 
-    /*
-    |--------------------------------------------------------------------------
-    | DATABASE CONNECTION
-    |--------------------------------------------------------------------------
-    */
+    // Connect to database
     $db = new Database();
     $conn = $db->connect();
 
-    /*
-    |--------------------------------------------------------------------------
-    | CHECK USER IN DATABASE
-    |--------------------------------------------------------------------------
-    */
-    $stmt = $conn->prepare("SELECT * FROM student WHERE Username = ?");
-    $stmt->bind_param("s", $username);
+    // Fetch student by email
+    $stmt = $conn->prepare("SELECT * FROM student WHERE Email = ?");
+    $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
 
-    /*
-    |--------------------------------------------------------------------------
-    | LOGIN VALIDATION
-    |--------------------------------------------------------------------------
-    */
+    // Check login
     if ($user = $result->fetch_assoc()) {
 
-        // TEMP password check (for now)
-        // later you will use password_hash()
+        // Temporary password check
         if ($password === "1234") {
 
-            // Create session
+            // Store session data
             $_SESSION['student_id'] = $user['StudentID'];
             $_SESSION['student_name'] = $user['StudentName'];
+            $_SESSION['role'] = 'student';
 
             // Redirect to dashboard
             header("Location: student_management/index.php");
@@ -62,7 +49,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // If login fails
-    echo "Invalid username or password";
+    // Login failed
+    header("Location: index.php?error=invalid");
+    exit();
 }
 ?>
