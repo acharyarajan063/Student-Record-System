@@ -42,4 +42,8 @@ class StudentController
         );
 
     }
+
+    public function destroy($id){
+        return $this->student->delete($id);
+    }
 }
