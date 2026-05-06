@@ -11,7 +11,8 @@ if (isset($_POST['addTeacher'])) {
     $department = $_POST['department'];
     $dateJoined = $_POST['dateJoined'];
 
-    $teacher->addTeacher($name, $email, $department, $dateJoined);
+    // updated function name (team style)
+    $teacher->create($name, $email, $department, $dateJoined, 1);
 
     header("Location: ../Teacher_management/index.php");
     exit();
@@ -22,7 +23,8 @@ if (isset($_GET['delete'])) {
 
     $id = $_GET['delete'];
 
-    $teacher->deactivateTeacher($id);
+    // updated function name (team style)
+    $teacher->deactivate($id);
 
     header("Location: ../Teacher_management/index.php");
     exit();

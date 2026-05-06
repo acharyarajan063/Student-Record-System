@@ -2,17 +2,18 @@
 require_once("../models/teacher.php");
 
 $teacher = new Teacher();
-$teachers = $teacher->getAllTeachers();
+$teachers = $teacher->getAll();
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teacher Management</title>
 
-    <!-- LINK CSS -->
+    <!-- TEAM CSS -->
     <link rel="stylesheet" href="../style.css">
 </head>
 
@@ -57,26 +58,28 @@ $teachers = $teacher->getAllTeachers();
 
             <h2>Teacher List</h2>
 
-            <table border="1">
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Department</th>
-                    <th>Date</th>
-                    <th>Status</th>
-                    <th>Action</th>
+            <table style="width:100%; margin-top:20px; border-collapse:collapse; font-size:14px;">
+                <tr style="background:#f1f5f9;">
+                    <th style="padding:10px; border:1px solid #ddd;">ID</th>
+                    <th style="padding:10px; border:1px solid #ddd;">Name</th>
+                    <th style="padding:10px; border:1px solid #ddd;">Email</th>
+                    <th style="padding:10px; border:1px solid #ddd;">Department</th>
+                    <th style="padding:10px; border:1px solid #ddd;">Date</th>
+                    <th style="padding:10px; border:1px solid #ddd;">Status</th>
+                    <th style="padding:10px; border:1px solid #ddd;">Action</th>
                 </tr>
 
                 <?php while($row = $teachers->fetch_assoc()) { ?>
                 <tr>
-                    <td><?php echo $row['TeacherID']; ?></td>
-                    <td><?php echo $row['TeacherName']; ?></td>
-                    <td><?php echo $row['Email']; ?></td>
-                    <td><?php echo $row['Department']; ?></td>
-                    <td><?php echo $row['DateJoined']; ?></td>
-                    <td><?php echo $row['IsActive'] ? "Active" : "Inactive"; ?></td>
-                    <td>
+                    <td style="padding:10px; border:1px solid #ddd;"><?php echo $row['TeacherID']; ?></td>
+                    <td style="padding:10px; border:1px solid #ddd;"><?php echo $row['TeacherName']; ?></td>
+                    <td style="padding:10px; border:1px solid #ddd;"><?php echo $row['Email']; ?></td>
+                    <td style="padding:10px; border:1px solid #ddd;"><?php echo $row['Department']; ?></td>
+                    <td style="padding:10px; border:1px solid #ddd;"><?php echo $row['DateJoined']; ?></td>
+                    <td style="padding:10px; border:1px solid #ddd;">
+                        <?php echo $row['IsActive'] ? "Active" : "Inactive"; ?>
+                    </td>
+                    <td style="padding:10px; border:1px solid #ddd;">
                         <a href="../controllers/teachercontroller.php?delete=<?php echo $row['TeacherID']; ?>">
                             Deactivate
                         </a>
