@@ -63,4 +63,15 @@ class Student
         $stmt->bind_param("i", $id);
         return $stmt->execute();
     }
+    public function search($keyword){
+        $sql = "SELECT * FROM student WHERE StudentName LIKE ? OR Email LIKE ?";
+        $stmt = $this->conn->prepare($sql);
+        if (!$stmt) {
+            die("Prepare failed: " . $this->conn->error);
+        }
+        $likeKeyword = '%' . $keyword . '%';
+        $stmt->bind_param("ss", $likeKeyword, $likeKeyword);
+        $stmt->execute();
+        return $stmt->get_result();
+    }
 }

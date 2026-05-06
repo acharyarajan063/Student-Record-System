@@ -2,26 +2,39 @@
 require_once '../controllers/StudentController.php';
 
 $controller = new StudentController();
-$students = $controller->index();
+if (isset($_GET['search'])) {
+
+    $student = $controller->search($_GET['search']);
+
+} else {
+
+    $students = $controller->index();
+}
 ?>
 <!DOCTYPE html>
 <html>
 
 <head>
     <title>Student List</title>
-<link rel="stylesheet" href="student.css">
+    <link rel="stylesheet" href="student.css">
 </head>
 
 <body>
 
     <h2>Student List</h2>
     <a href="add.php" style="display:inline-block; margin-bottom:20px;">
-    ➕ Add New Student
-</a>
+        ➕ Add New Student
+    </a>
+    <form method="GET">
 
+        <input type="text" name="search" placeholder="Search student...">
+
+        <button type="submit">Search</button>
+
+    </form>
     <div class="card-container">
 
-        <?php while ($row = $students->fetch_assoc()): ?>
+        <?php while ($row = $student->fetch_assoc()): ?>
 
             <div class="card">
                 <h3><?= htmlspecialchars($row['StudentName']) ?></h3>

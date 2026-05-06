@@ -46,4 +46,9 @@ class StudentController
     public function destroy($id){
         return $this->student->delete($id);
     }
+
+    public function search($keyword){
+        // Implementation for searching students by keyword
+        return $this->student->search($keyword);
+    }
 }
