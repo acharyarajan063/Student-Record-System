@@ -2,8 +2,7 @@
 $host = "localhost";
 $user = "root";
 $password = "";
-$db = "student_record_system";  // Changed to lowercase (match your database name)
-
+$db = "student_record_system";  
 $conn = new mysqli($host, $user, $password, $db);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
@@ -23,7 +22,7 @@ try {
 }
 
 // =============================================
-// VALIDATION FUNCTIONS (ADD THESE!)
+// VALIDATION FUNCTIONS 
 // =============================================
 
 /**

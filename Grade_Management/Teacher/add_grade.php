@@ -5,7 +5,7 @@ include('../db.php');
 $_SESSION['role'] = 'teacher';
 $_SESSION['user_id'] = 1;
 
-// Check teacher access (TEACHERS CAN ADD GRADES)
+// Check teacher access 
 if (!isset($_SESSION['role']) || $_SESSION['role'] != 'teacher') {
     die("Access denied");
 }
