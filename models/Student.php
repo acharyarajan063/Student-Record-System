@@ -74,4 +74,37 @@ class Student
         $stmt->execute();
         return $stmt->get_result();
     }
+
+    public function filterByLevel($level){
+        $sql = "SELECT * FROM student WHERE Level = ?";
+        $stmt = $this->conn->prepare($sql);
+        if (!$stmt) {
+            die("Prepare failed: " . $this->conn->error);
+        }
+        $stmt->bind_param("s", $level);
+        $stmt->execute();
+        return $stmt->get_result();
+    }
+
+    public function searchAndFilter($search, $level){
+
+    $sql = "SELECT * FROM student
+            WHERE (StudentName LIKE ? OR Email LIKE ?)
+            AND Level = ?";
+
+    $stmt = $this->conn->prepare($sql);
+
+    if (!$stmt) {
+        die("Prepare failed: " . $this->conn->error);
+    }
+
+    $likeSearch = '%' . $search . '%';
+
+    $stmt->bind_param("sss", $likeSearch, $likeSearch, $level);
+
+    $stmt->execute();
+
+    return $stmt->get_result();
+}
+
 }

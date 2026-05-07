@@ -51,4 +51,13 @@ class StudentController
         // Implementation for searching students by keyword
         return $this->student->search($keyword);
     }
+
+    public function filterByLevel($level){
+        // Implementation for filtering students by level
+        return $this->student->filterByLevel($level);
+    }
+    public function searchAndFilter($search, $level){
+    // Implementation for searching and filtering students
+    return $this->student->searchAndFilter($search, $level);
+}
 }
