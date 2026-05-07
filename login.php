@@ -1,55 +1,105 @@
 <?php
-// Enable error reporting (development only)
+
+// Enable error reporting
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// Include database connection
+// Include database
 require_once "database/db.php";
 
 // Start session
 session_start();
 
-// Check if form is submitted
+// Check form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    // Get input values
+    // Get form values
     $email = $_POST['email'] ?? '';
     $password = $_POST['password'] ?? '';
 
-    // Validate inputs
-   if (empty($email) || empty($password)) {
-    header("Location: index.php?error=empty");
-    exit();
-}
+    // Validate empty fields
+    if (empty($email) || empty($password)) {
 
-    // Connect to database
+        header("Location: index.php?error=empty");
+        exit();
+    }
+
+    // Database connection
     $db = new Database();
     $conn = $db->connect();
 
-    // Fetch student by email
-    $stmt = $conn->prepare("SELECT * FROM student WHERE Email = ?");
+    /*
+    |--------------------------------------------------------------------------
+    | Check Admin Login
+    |--------------------------------------------------------------------------
+    */
+
+    $stmt = $conn->prepare(
+        "SELECT * FROM admin WHERE Email = ?"
+    );
+
     $stmt->bind_param("s", $email);
+
     $stmt->execute();
+
     $result = $stmt->get_result();
 
-    // Check login
-    if ($user = $result->fetch_assoc()) {
+    // Admin found
+    if ($admin = $result->fetch_assoc()) {
 
-        // Temporary password check
-        if ($password === "1234") {
+        // Check password
+        if ($password === $admin['Password']) {
 
-            // Store session data
-            $_SESSION['student_id'] = $user['StudentID'];
-            $_SESSION['student_name'] = $user['StudentName'];
-            $_SESSION['role'] = 'student';
+            // Store session
+            $_SESSION['admin_id'] = $admin['AdminID'];
+            $_SESSION['admin_name'] = $admin['Name'];
+            $_SESSION['role'] = 'admin';
 
-            // Redirect to dashboard
-            header("Location: student_management/index.php");
+            // Redirect admin
+            header("Location: student_management/admin.php");
             exit();
         }
     }
 
-    // Login failed
+    /*
+    |--------------------------------------------------------------------------
+    | Check Student Login
+    |--------------------------------------------------------------------------
+    */
+
+    $stmt = $conn->prepare(
+        "SELECT * FROM student WHERE Email = ?"
+    );
+
+    $stmt->bind_param("s", $email);
+
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+
+    // Student found
+    if ($student = $result->fetch_assoc()) {
+
+        // Check password
+        if ($password === $student['Password']) {
+
+            // Store session
+            $_SESSION['student_id'] = $student['StudentID'];
+            $_SESSION['student_name'] = $student['StudentName'];
+            $_SESSION['role'] = 'student';
+
+            // Redirect student
+           header("Location: student_management/student_dashboard.php");
+            exit();
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Login Failed
+    |--------------------------------------------------------------------------
+    */
+
     header("Location: index.php?error=invalid");
     exit();
 }

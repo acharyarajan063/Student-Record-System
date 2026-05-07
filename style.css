@@ -1,4 +1,6 @@
-/* GLOBAL RESETS */
+/* =========================================
+   GLOBAL RESET
+========================================= */
 * {
   margin: 0;
   padding: 0;
@@ -6,80 +8,79 @@
   font-family: 'Poppins', sans-serif;
 }
 
-/* BODY */
+/* =========================================
+   BODY
+========================================= */
 body {
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #bf3ecd, #af9a2e); /* Light gray background to make the card pop */
-}
-
-/* CONTAINER */
-.container {
-  width: 1000px; /* Slightly wider to accommodate the larger logo and better spacing */
-  height: 550px; /* Slightly taller for better breathing room */
-  display: flex;
-  border-radius: 24px; /* Slightly rounder corners for a modern feel */
-  overflow: hidden;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15); /* Softer, deeper shadow */
-  background: white;
+  background: linear-gradient(135deg, #bf3ecd, #af9a2e);
+  padding: 20px;
 }
 
 /* =========================================
-   LEFT SIDE (BRANDING) 
-   ========================================= */
-.left {
-  flex: 1.1; /* Gives slightly more room to the left side */
+   MAIN CONTAINER
+========================================= */
+.container {
+  width: 100%;
+  max-width: 1000px;
+  min-height: 550px;
   display: flex;
-  align-items: bottom; /* Aligns content to the bottom for a more grounded look */
+  border-radius: 24px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+}
+
+/* =========================================
+   LEFT SIDE
+========================================= */
+.left {
+  flex: 1.1;
+  display: flex;
+  align-items: center;
   position: relative;
-  /* NEW, MODERN GRADIENT: Deep Indigo to Vibrant Purple */
   background: linear-gradient(135deg, #4f46e5, #ff00cc);
 }
 
-/* SUBTLE GLOW OVERLAY */
+/* Glow Overlay */
 .left::after {
   content: "";
   position: absolute;
   inset: 0;
   background: radial-gradient(
     circle at top left,
-    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0.12),
     transparent 70%
   );
-  pointer-events: none;
 }
 
-/* LEFT TEXT CONTENT */
+/* Left Content */
 .left-content {
   padding: 60px;
-  max-width: 450px;
   position: relative;
   z-index: 2;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
 }
 
-/* LARGER LOGO */
+/* Logo */
 .left-content .logo {
-  width: 180px; /* Increased from 100px to make it prominent */
-  margin-bottom: 50px;
-  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2)); /* Slight shadow on the logo */
+  width: 180px;
+  margin-bottom: 40px;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));
 }
 
-/* TITLE */
+/* Heading */
 .left-content h1 {
-  font-size: 42px; /* Slightly larger */
+  font-size: 42px;
   font-weight: 700;
-  margin-bottom: 15px;
-  color: #ffffff;
+  color: white;
   line-height: 1.1;
-  letter-spacing: -0.5px;
+  margin-bottom: 15px;
 }
 
-/* SUBTITLE */
+/* Subtitle */
 .left-content p {
   font-size: 18px;
   color: #e0e7ff;
@@ -87,94 +88,110 @@ body {
   font-weight: 500;
 }
 
-/* DESCRIPTION */
+/* Description */
 .left-content span {
   font-size: 15px;
-  color: #94a3b8;
-  line-height: 1.6;
+  color: #dbeafe;
+  line-height: 1.7;
 }
 
-
 /* =========================================
-   RIGHT SIDE (FORM) 
-   ========================================= */
+   RIGHT SIDE
+========================================= */
 .right {
   flex: 1;
   padding: 50px;
   display: flex;
-  flex-direction: column;
   justify-content: center;
+  align-items: center;
 }
 
-/* FORM CONTAINER */
+/* Form Box */
 .form-box {
   width: 100%;
-  max-width: 360px; 
-  margin: 0 auto;
+  max-width: 360px;
 }
 
-/* FORM TITLE */
+/* Form Heading */
 .form-box h2 {
-  font-size: 28px;
+  font-size: 30px;
   font-weight: 700;
-  margin-bottom: 35px;
+  margin-bottom: 30px;
   text-align: center;
   color: #0f172a;
-  letter-spacing: -0.5px;
 }
 
-/* INPUT GROUPS */
+/* =========================================
+   ERROR MESSAGE
+========================================= */
+.error-message {
+  background: #f8d7da;
+  color: #721c24;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* =========================================
+   FORM GROUP
+========================================= */
 .input-group {
   margin-bottom: 22px;
-  text-align: left;
 }
 
-/* LABEL */
+/* Label */
 label {
+  display: block;
+  margin-bottom: 8px;
   font-size: 14px;
   font-weight: 500;
   color: #475569;
-  display: block;
-  margin-bottom: 8px;
 }
 
-/* INPUTS */
+/* =========================================
+   INPUTS
+========================================= */
 input[type="text"],
+input[type="email"],
 input[type="password"] {
   width: 100%;
-  padding: 15px 20px;
-  border-radius: 12px; /* Modern squared-off rounded corners instead of pills */
+  padding: 15px 18px;
+  border-radius: 12px;
   border: 1.5px solid #cbd5e1;
+  background: #f8fafc;
   outline: none;
   font-size: 15px;
   color: #1e293b;
   transition: all 0.3s ease;
-  background: #f8fafc;
 }
 
+/* Placeholder */
 input::placeholder {
   color: #94a3b8;
-  font-weight: 400;
 }
 
-input[type="text"]:hover,
-input[type="password"]:hover {
+/* Hover */
+input:hover {
   border-color: #94a3b8;
 }
 
-input[type="text"]:focus,
-input[type="password"]:focus {
+/* Focus */
+input:focus {
   border-color: #ff00cc;
-  background: #ffffff;
+  background: white;
   box-shadow: 0 0 0 4px rgba(255, 0, 204, 0.1);
 }
 
-/* PASSWORD WRAPPER */
+/* =========================================
+   PASSWORD FIELD
+========================================= */
 .password-box {
   position: relative;
 }
 
-/* PASSWORD EYE ICON */
+/* Eye Icon */
 .password-box span {
   position: absolute;
   right: 18px;
@@ -182,82 +199,89 @@ input[type="password"]:focus {
   transform: translateY(-50%);
   cursor: pointer;
   color: #94a3b8;
+  transition: 0.3s;
   font-size: 18px;
-  transition: color 0.2s;
 }
 
 .password-box span:hover {
   color: #475569;
 }
 
-/* OPTIONS (Remember Me & Forgot Password) */
+/* =========================================
+   OPTIONS
+========================================= */
 .options {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 28px;
   font-size: 14px;
-  margin-bottom: 30px;
 }
 
+/* Remember Me */
 .options label {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 0;
+  margin: 0;
   cursor: pointer;
-  color: #475569;
 }
 
+/* Checkbox */
 .options input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
-  cursor: pointer;
+  width: 16px;
+  height: 16px;
   accent-color: #ff00cc;
-  border-radius: 4px;
+  cursor: pointer;
 }
 
+/* Forgot Password */
 .options a {
-  color: #4f46e5; /* Indigo link to tie back to the left side */
+  color: #4f46e5;
   text-decoration: none;
   font-weight: 600;
-  transition: color 0.2s;
 }
 
 .options a:hover {
-  color: #3730a3;
   text-decoration: underline;
 }
 
-/* BUTTON */
+/* =========================================
+   BUTTON
+========================================= */
 button {
   width: 100%;
   padding: 16px;
-  border-radius: 12px; /* Matches the new input corners */
   border: none;
+  border-radius: 12px;
   background: linear-gradient(135deg, #ff00cc, #ff4fd8);
   color: white;
   font-size: 16px;
   font-weight: 600;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.4px;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(255, 0, 204, 0.25);
 }
 
+/* Hover */
 button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(255, 0, 204, 0.4);
+  box-shadow: 0 8px 25px rgba(255, 0, 204, 0.35);
 }
 
+/* Click */
 button:active {
   transform: translateY(0);
 }
 
-/* REGISTER TEXT */
+/* =========================================
+   REGISTER
+========================================= */
 .register {
-  margin-top: 25px;
-  font-size: 14px;
+  margin-top: 24px;
   text-align: center;
+  font-size: 14px;
   color: #64748b;
 }
 
@@ -269,4 +293,46 @@ button:active {
 
 .register a:hover {
   text-decoration: underline;
+}
+
+/* =========================================
+   RESPONSIVE DESIGN
+========================================= */
+@media (max-width: 900px) {
+
+  .container {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .left {
+    min-height: 250px;
+  }
+
+  .left-content {
+    padding: 40px;
+  }
+
+  .left-content h1 {
+    font-size: 32px;
+  }
+
+  .right {
+    padding: 40px 25px;
+  }
+}
+
+@media (max-width: 500px) {
+
+  .left-content h1 {
+    font-size: 28px;
+  }
+
+  .left-content p {
+    font-size: 16px;
+  }
+
+  .form-box h2 {
+    font-size: 26px;
+  }
 }
