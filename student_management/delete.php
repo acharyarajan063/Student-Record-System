@@ -9,7 +9,7 @@ if (isset($_GET['id'])) {
 
     $controller->destroy($id);
 
-    header("Location: index.php");
+    header("Location: admin.php");
     exit();
 }
 ?>

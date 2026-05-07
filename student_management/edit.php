@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $controller->update($_POST);
 
         // Redirect back
-        header("Location: index.php");
+        header("Location: admin.php");
         exit();
     }
 }
@@ -221,7 +221,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <!-- Back Link -->
         <div class="back-container">
 
-            <a href="index.php" class="back-btn">
+            <a href="admin.php" class="back-btn">
                 ← Back to Student List
             </a>
 
