@@ -109,7 +109,8 @@ body {
 /* Form Box */
 .form-box {
   width: 100%;
-  max-width: 360px;
+  max-width: 360px; 
+  margin: 0 auto;
 }
 
 /* Form Heading */
@@ -293,46 +294,4 @@ button:active {
 
 .register a:hover {
   text-decoration: underline;
-}
-
-/* =========================================
-   RESPONSIVE DESIGN
-========================================= */
-@media (max-width: 900px) {
-
-  .container {
-    flex-direction: column;
-    height: auto;
-  }
-
-  .left {
-    min-height: 250px;
-  }
-
-  .left-content {
-    padding: 40px;
-  }
-
-  .left-content h1 {
-    font-size: 32px;
-  }
-
-  .right {
-    padding: 40px 25px;
-  }
-}
-
-@media (max-width: 500px) {
-
-  .left-content h1 {
-    font-size: 28px;
-  }
-
-  .left-content p {
-    font-size: 16px;
-  }
-
-  .form-box h2 {
-    font-size: 26px;
-  }
 }

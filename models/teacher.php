@@ -81,6 +81,66 @@ class Teacher
         return $stmt->execute();
     }
 
+    // Get all courses with their assigned teacher name
+    public function getAllCourses()
+    {
+        $sql = "SELECT c.CourseID, c.CourseName, c.CourseCode, t.TeacherName
+                FROM course c
+                LEFT JOIN teacher t ON c.TeacherID = t.TeacherID
+                WHERE c.IsActive = 1
+                ORDER BY c.CourseName";
+        return $this->conn->query($sql);
+    }
+
+    // Assign a teacher to a course
+    public function assignCourse($courseId, $teacherId)
+    {
+        $sql = "UPDATE course SET TeacherID = ? WHERE CourseID = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ii", $teacherId, $courseId);
+        return $stmt->execute();
+    }
+
+    // Get all courses assigned to a specific teacher
+    public function getAssignedCourses($teacherId)
+    {
+        $sql = "SELECT CourseID, CourseName, CourseCode, CreditPoints, StartDate
+                FROM course
+                WHERE TeacherID = ? AND IsActive = 1
+                ORDER BY CourseName";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $teacherId);
+        $stmt->execute();
+        return $stmt->get_result();
+    }
+
+    // Unassign teacher from a course (set TeacherID to NULL)
+    public function unassignCourse($courseId)
+    {
+        $sql = "UPDATE course SET TeacherID = NULL WHERE CourseID = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $courseId);
+        return $stmt->execute();
+    }
+
+    // Check if email already exists (for duplicate prevention)
+    public function emailExists($email, $excludeId = null)
+    {
+        if ($excludeId) {
+            $sql = "SELECT TeacherID FROM teacher WHERE Email = ? AND TeacherID != ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("si", $email, $excludeId);
+        } else {
+            $sql = "SELECT TeacherID FROM teacher WHERE Email = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("s", $email);
+        }
+
+        $stmt->execute();
+        $stmt->store_result();
+        return $stmt->num_rows > 0;
+    }
+
     // Deactivate teacher (important for your system)
     public function deactivate($id)
     {
