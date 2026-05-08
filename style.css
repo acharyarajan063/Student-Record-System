@@ -109,7 +109,7 @@ body {
 /* FORM CONTAINER */
 .form-box {
   width: 100%;
-  max-width: 360px; 
+  max-width: 750px;  /* 🔥 increase size */
   margin: 0 auto;
 }
 
@@ -269,4 +269,44 @@ button:active {
 
 .register a:hover {
   text-decoration: underline;
+}
+/* =========================================
+   TABLE (TEACHER MANAGEMENT)
+   ========================================= */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+table th, table td {
+  padding: 10px;
+  border: 1px solid #e2e8f0;
+  text-align: left;
+}
+
+table th {
+  background-color: #f1f5f9;
+  font-weight: 600;
+}
+
+table tr:nth-child(even) {
+  background-color: #f8fafc;
+}
+
+table a {
+  color: #4f46e5;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+table a:hover {
+  text-decoration: underline;
+}
+table {
+  width: 100%;
+  display: block;
+  overflow-x: auto;
 }
