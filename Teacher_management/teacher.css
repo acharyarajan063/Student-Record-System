@@ -1,19 +1,29 @@
+body {
+    height: auto;
+    min-height: 100vh;
+    align-items: flex-start;
+    padding: 30px 20px;
+    box-sizing: border-box;
+}
+
 /* Override container for pages with a table below the form */
 .container {
     height: auto;
     min-height: 550px;
     overflow: visible;
-    width: 95%;
-    max-width: 1200px;
+    width: 100%;
+    max-width: 1300px;
     align-items: stretch;
 }
 
 .left {
+    flex: 0.4;
     min-height: 100%;
 }
 
 .right {
-    overflow-y: auto;
+    flex: 2;
+    overflow-x: auto;
     padding: 40px;
 }
 
