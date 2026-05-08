@@ -154,5 +154,22 @@ class Teacher
         $stmt->bind_param("i", $id);
         return $stmt->execute();
     }
+    public function searchTeachers($search)
+{
+    $search = "%$search%";
+
+    $stmt = $this->conn->prepare("
+        SELECT * FROM teacher
+        WHERE TeacherName LIKE ?
+        OR Email LIKE ?
+        OR Department LIKE ?
+    ");
+
+    $stmt->bind_param("sss", $search, $search, $search);
+
+    $stmt->execute();
+
+    return $stmt->get_result();
+}
 }
 ?>
