@@ -1,10 +1,19 @@
 <?php
 require_once '../controllers/CourseController.php';
 
+// Create controller object
 $controller = new CourseController();
 
+// Get course ID from URL
+$id = $_GET['id'];
+
+// Get course data
+$course = $controller->edit($id);
+
+// Error variable
 $error = "";
 
+// Check if form submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($_POST['courseName'])) {
@@ -18,7 +27,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif (empty($_POST['teacherID'])) {
         $error = "Teacher ID is required";
     } else {
-        $controller->store($_POST);
+        // Update course
+        $controller->update($_POST);
+        // Redirect back
         header("Location: admin.php");
         exit();
     }
@@ -29,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Add Course</title>
+    <title>Edit Course</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -63,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         label { font-weight: bold; color: #2c3e50; }
         button {
-            background: #27ae60;
+            background: #3498db;
             color: white;
             border: none;
             padding: 12px 18px;
@@ -71,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             cursor: pointer;
             font-size: 15px;
         }
-        button:hover { background: #219150; }
+        button:hover { background: #2980b9; }
         .button-group {
             display: flex;
             justify-content: center;
@@ -83,6 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             text-decoration: none;
             color: #3498db;
             font-weight: bold;
+            transition: 0.3s;
         }
         .back-btn:hover { color: #21618c; }
     </style>
@@ -91,45 +103,63 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <div class="container">
 
-        <h2>Add Course</h2>
+        <h2>Edit Course</h2>
 
+        <!-- Error Message -->
         <?php if (!empty($error)): ?>
             <div class="error"><?= htmlspecialchars($error) ?></div>
         <?php endif; ?>
 
+        <!-- Edit Form -->
         <form method="POST">
 
+            <!-- Hidden Course ID -->
+            <input type="hidden" name="id" value="<?= $course['CourseID'] ?>">
+
+            <!-- Course Name -->
             <label>Course Name</label>
             <input type="text" name="courseName" 
-            placeholder="Enter course name" required>
+            value="<?= htmlspecialchars($course['CourseName']) ?>">
 
+            <!-- Course Code -->
             <label>Course Code</label>
             <input type="text" name="courseCode" 
-            placeholder="Enter course code e.g. CS101" required>
+            value="<?= htmlspecialchars($course['CourseCode']) ?>">
 
+            <!-- Credit Points -->
             <label>Credit Points</label>
             <input type="number" name="creditPoints" 
-            placeholder="Enter credit points" min="1" required>
+            value="<?= htmlspecialchars($course['CreditPoints']) ?>">
 
+            <!-- Start Date -->
             <label>Start Date</label>
-            <input type="date" name="startDate" required>
+            <input type="date" name="startDate" 
+            value="<?= htmlspecialchars($course['StartDate']) ?>">
 
+            <!-- Teacher ID -->
             <label>Teacher ID</label>
             <input type="number" name="teacherID" 
-            placeholder="Enter Teacher ID" required>
+            value="<?= htmlspecialchars($course['TeacherID']) ?>">
 
+            <!-- Status -->
             <label>Status</label>
             <select name="isActive">
-                <option value="1">Active</option>
-                <option value="0">Inactive</option>
+                <option value="1" <?= ($course['IsActive'] == 1) ? 'selected' : '' ?>>
+                    Active
+                </option>
+                <option value="0" <?= ($course['IsActive'] == 0) ? 'selected' : '' ?>>
+                    Inactive
+                </option>
             </select>
 
+            <!-- Update Button -->
             <div class="button-group">
-                <button type="submit">➕ Add Course</button>
+                <button type="submit">✏️ Update Course</button>
             </div>
 
         </form>
 
+        <!-- Back Link -->
         <div class="back-container">
             <a href="admin.php" class="back-btn">← Back to Course List</a>
         </div>

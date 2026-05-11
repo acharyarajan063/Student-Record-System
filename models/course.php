@@ -28,8 +28,8 @@ class Course
     public function getAll(){
         $sql= "SELECT * FROM course";
         $result = $this->conn->query($sql);
-       $this->conn->query($sql);
-       return $result;
+        $this->conn->query($sql);
+        return $result;
     }
 
     //get single course by id
@@ -65,5 +65,37 @@ class Course
         }
         $stmt->bind_param("i", $id);
         return $stmt->execute();
+    }
+
+    // Search courses by name or code
+    public function search($keyword)
+    {
+        $keyword = "%" . $keyword . "%";
+        $sql = "SELECT * FROM course WHERE CourseName LIKE ? OR CourseCode LIKE ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ss", $keyword, $keyword);
+        $stmt->execute();
+        return $stmt->get_result();
+    }
+
+    // Filter courses by active status
+    public function filterByStatus($isActive)
+    {
+        $sql = "SELECT * FROM course WHERE IsActive = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $isActive);
+        $stmt->execute();
+        return $stmt->get_result();
+    }
+
+    // Search and filter together
+    public function searchAndFilter($keyword, $isActive)
+    {
+        $keyword = "%" . $keyword . "%";
+        $sql = "SELECT * FROM course WHERE (CourseName LIKE ? OR CourseCode LIKE ?) AND IsActive = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ssi", $keyword, $keyword, $isActive);
+        $stmt->execute();
+        return $stmt->get_result();
     }
 }
