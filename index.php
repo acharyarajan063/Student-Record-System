@@ -1,228 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Educare Institute of Technology</title>
-
-    <!-- Google Font -->
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet"
-    >
-
-    <!-- CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-
 </head>
-
 <body>
 
     <div class="container">
-
-        <!-- LEFT SIDE -->
         <div class="left">
-
+            <div class="circle top-circle"></div>
+            <div class="circle bottom-circle"></div>
             <div class="left-content">
-
-                <div class="logo-box">
-
-                    🎓
-
+                
+                <h1>Welcome<br>Back</h1>
+                <p>Sign in to your portal to manage classes, students, attendance, and resources.</p>
+                
+                <div class="stats">
+                    <div class="stat-card">
+                        <h2>1240</h2>
+                        <span>Students</span>
+                    </div>
+                    <div class="stat-card">
+                        <h2>86</h2>
+                        <span>Teachers</span>
+                    </div>
+                    <div class="stat-card">
+                        <h2>34</h2>
+                        <span>Courses</span>
+                    </div>
                 </div>
-
-                <h1>
-
-                    Student Record System
-
-                </h1>
-
-                <p>
-
-                    Educare Institute of Technology
-
-                </p>
-
-                <span>
-
-                    Manage students, attendance, grades, and courses easily through one secure platform.
-
-                </span>
-
             </div>
-
         </div>
 
-        <!-- RIGHT SIDE -->
         <div class="right">
-
             <div class="form-box">
+                <h2>Sign In</h2>
+                <p class="subtitle">Sign in to manage your classes</p>
 
-                <h2>
+                <div class="role-tabs" id="roleTabs">
+                    <button type="button" class="tab active" data-role="teacher">Teacher</button>
+                    <button type="button" class="tab" data-role="admin">Admin</button>
+                    <button type="button" class="tab" data-role="student">Student</button>
+                </div>
 
-                    Login
-
-                </h2>
-
-                <!-- Error Messages -->
-                <?php if (isset($_GET['error'])): ?>
-
-                    <div class="error-box">
-
-                        <?php
-
-                            if ($_GET['error'] == 'empty') {
-
-                                echo "Please fill all fields.";
-
-                            } elseif ($_GET['error'] == 'invalid') {
-
-                                echo "Invalid email or password.";
-
-                            }
-
-                        ?>
-
-                    </div>
-
-                <?php endif; ?>
-
-                <!-- Login Form -->
                 <form method="POST" action="login.php">
+                    <input type="hidden" name="role" id="selectedRole" value="teacher">
 
-                    <!-- Email -->
                     <div class="input-group">
-
-                        <label>Email Address</label>
-
-                        <input
-                            type="email"
-                            name="email"
-                            placeholder="Enter your email"
-                            required
-                        >
-
+                        <label>E-MAIL</label>
+                        <input type="email" id="emailInput" name="email" placeholder="teacher@school.com" required>
                     </div>
 
-                    <!-- Password -->
                     <div class="input-group">
-
-                        <label>Password</label>
-
+                        <label>PASSWORD</label>
                         <div class="password-box">
-
-                            <input
-                                type="password"
-                                name="password"
-                                id="password"
-                                placeholder="Enter your password"
-                                required
-                            >
-
-                            <span onclick="togglePassword()">
-
-                                👁
-
-                            </span>
-
+                            <input type="password" name="password" id="password" placeholder="Enter your password" required>
+                            <span onclick="togglePassword()">👁</span>
                         </div>
-
                     </div>
 
-                    <!-- Options -->
-                    <div class="options">
-
-                        <label class="remember">
-
-                            <input type="checkbox">
-
-                            Remember me
-
-                        </label>
-
-                        <a href="#">
-
-                            Forgot password?
-
-                        </a>
-
+                    <div class="forgot-password">
+                        <a href="#">Forgot password?</a>
                     </div>
 
-                    <!-- Login Button -->
-                    <button type="submit">
-
-                        Login
-
-                    </button>
-
+                    <button type="submit" class="login-btn">Sign In</button>
                 </form>
 
-                <!-- Register -->
-                <div class="register-link">
-
-                    Don't have an account?
-
-                    <a href="student_management/register.php">
-
-                        Register as Student
-
-                    </a>
-
+                <div class="bottom-text">
+                    Need access? <a href="student_management/register.php">Register as Student</a>
                 </div>
-
-                <!-- Role Info -->
-                <div class="role-info">
-
-                    <div class="role-card">
-
-                        👨‍💼 Admin
-
-                    </div>
-
-                    <div class="role-card">
-
-                        👨‍🏫 Teacher
-
-                    </div>
-
-                    <div class="role-card">
-
-                        👨‍🎓 Student
-
-                    </div>
-
-                </div>
-
             </div>
-
         </div>
-
     </div>
 
-    <!-- Toggle Password -->
     <script>
+        // --- Interactivity for Role Tabs ---
+        const tabs = document.querySelectorAll('.tab');
+        const emailInput = document.getElementById('emailInput');
+        const roleInput = document.getElementById('selectedRole');
 
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs
+                tabs.forEach(t => t.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                tab.classList.add('active');
+
+                // Get the role data attribute
+                const role = tab.getAttribute('data-role');
+                
+                // Update the hidden input for backend submission
+                roleInput.value = role;
+
+                // Update the email placeholder to match the role dynamically
+                if (role === 'teacher') {
+                    emailInput.placeholder = 'teacher@school.com';
+                } else if (role === 'admin') {
+                    emailInput.placeholder = 'admin@school.com';
+                } else {
+                    emailInput.placeholder = 'student@school.com';
+                }
+            });
+        });
+
+        // --- Password Visibility Toggle ---
         function togglePassword() {
-
             const pass = document.getElementById("password");
-
             if (pass.type === "password") {
-
                 pass.type = "text";
-
             } else {
-
                 pass.type = "password";
-
             }
         }
-
     </script>
-
 </body>
-
 </html>
