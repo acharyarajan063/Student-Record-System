@@ -1,37 +1,89 @@
 <?php
-// index.php - display all courses
+// Include Course Controller
+require_once '../controllers/CourseController.php';
 
-$host = 'localhost';
-$user = 'root';
-$password = '';
-$database = 'student_record_system';
+// Create controller object
+$controller = new CourseController();
 
-$mysqli = new mysqli($host, $user, $password, $database);
-if ($mysqli->connect_error) {
-    die('Database connection failed: ' . $mysqli->connect_error);
+// Get search value from URL
+$search = $_GET['search'] ?? '';
+
+// Get filter value from URL
+$isActive = $_GET['isActive'] ?? '';
+
+if (!empty($search) && $isActive !== '') {
+    $courses = $controller->searchAndFilter($search, $isActive);
+} elseif (!empty($search)) {
+    $courses = $controller->search($search);
+} elseif ($isActive !== '') {
+    $courses = $controller->filterByStatus($isActive);
+} else {
+    $courses = $controller->index();
 }
-
-$result = $mysqli->query('SELECT * FROM course ORDER BY CourseID ASC');
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Course List</title>
+    <title>Course Management</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 2rem; background: #f4f4f4; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 2rem;
+            background: #f4f4f4;
+        }
         h2 { color: #2c3e50; }
-        .card-container { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1rem; }
-        .card { background: white; border-radius: 8px; padding: 1.2rem; width: 280px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        .card h3 { margin: 0 0 0.5rem; color: #2c3e50; }
-        .card p { margin: 0.3rem 0; color: #555; font-size: 0.9rem; }
-        .actions { margin-top: 1rem; display: flex; gap: 0.5rem; }
-        .actions a { padding: 0.4rem 0.8rem; border-radius: 4px; text-decoration: none; font-size: 0.85rem; }
-        .edit { background: #3498db; color: white; }
-        .delete { background: #e74c3c; color: white; }
-        .add-btn { display: inline-block; margin-bottom: 1rem; padding: 0.6rem 1.2rem; background: #27ae60; color: white; text-decoration: none; border-radius: 5px; }
-        .badge { display: inline-block; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem; }
+        .add-btn {
+            display: inline-block;
+            margin-bottom: 1rem;
+            padding: 0.6rem 1.2rem;
+            background: #27ae60;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        form { margin-bottom: 1rem; }
+        input, select, button { padding: 0.5rem; margin-right: 0.5rem; }
+        button {
+            background: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        th {
+            background: #2c3e50;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        td { padding: 12px; border-bottom: 1px solid #ddd; }
+        tr:hover { background: #f1f1f1; }
+        .edit-btn {
+            background: #3498db;
+            color: white;
+            padding: 6px 10px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 14px;
+            margin-right: 6px;
+        }
+        .delete-btn {
+            background: #e74c3c;
+            color: white;
+            padding: 6px 10px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 13px; }
         .active { background: #d4edda; color: #155724; }
         .inactive { background: #f8d7da; color: #721c24; }
     </style>
@@ -39,32 +91,66 @@ $result = $mysqli->query('SELECT * FROM course ORDER BY CourseID ASC');
 <body>
 
     <h2>Course Management</h2>
+
     <a href="add.php" class="add-btn">➕ Add New Course</a>
 
-    <div class="card-container">
+    <!-- Search + Filter Form -->
+    <form method="GET">
+        <input type="text" name="search" 
+        placeholder="Search course..." 
+        value="<?= htmlspecialchars($search) ?>">
 
-        <?php while ($row = $result->fetch_assoc()): ?>
+        <select name="isActive">
+            <option value="">All Status</option>
+            <option value="1" <?= ($isActive == '1') ? 'selected' : '' ?>>Active</option>
+            <option value="0" <?= ($isActive == '0') ? 'selected' : '' ?>>Inactive</option>
+        </select>
 
-            <div class="card">
-                <h3><?= htmlspecialchars($row['CourseName']) ?></h3>
-                <p><strong>Code:</strong> <?= htmlspecialchars($row['CourseCode']) ?></p>
-                <p><strong>Credits:</strong> <?= htmlspecialchars($row['CreditPoints']) ?></p>
-                <p><strong>Start Date:</strong> <?= htmlspecialchars($row['StartDate']) ?></p>
-                <p><strong>Teacher ID:</strong> <?= htmlspecialchars($row['TeacherID']) ?></p>
-                <p><strong>Status:</strong> 
-                    <span class="badge <?= $row['IsActive'] ? 'active' : 'inactive' ?>">
-                        <?= $row['IsActive'] ? 'Active' : 'Inactive' ?>
-                    </span>
-                </p>
-                <div class="actions">
-                    <a href="edit.php?id=<?= $row['CourseID'] ?>" class="edit">Edit</a>
-                    <a href="delete.php?id=<?= $row['CourseID'] ?>" class="delete">Delete</a>
-                </div>
-            </div>
+        <button type="submit">Apply</button>
+    </form>
 
-        <?php endwhile; ?>
+    <!-- Course Table -->
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Course Name</th>
+            <th>Course Code</th>
+            <th>Credit Points</th>
+            <th>Start Date</th>
+            <th>Teacher ID</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
 
-    </div>
+        <?php if ($courses->num_rows > 0): ?>
+            <?php while ($row = $courses->fetch_assoc()): ?>
+                <tr>
+                    <td><?= htmlspecialchars($row['CourseID']) ?></td>
+                    <td><?= htmlspecialchars($row['CourseName']) ?></td>
+                    <td><?= htmlspecialchars($row['CourseCode']) ?></td>
+                    <td><?= htmlspecialchars($row['CreditPoints']) ?></td>
+                    <td><?= htmlspecialchars($row['StartDate']) ?></td>
+                    <td><?= htmlspecialchars($row['TeacherID']) ?></td>
+                    <td>
+                        <span class="badge <?= $row['IsActive'] ? 'active' : 'inactive' ?>">
+                            <?= $row['IsActive'] ? 'Active' : 'Inactive' ?>
+                        </span>
+                    </td>
+                    <td>
+                        <a href="edit.php?id=<?= $row['CourseID'] ?>" class="edit-btn">Edit</a>
+                        <a href="delete.php?id=<?= $row['CourseID'] ?>" class="delete-btn"
+                            onclick="return confirm('Are you sure you want to delete this course?')">
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+            <?php endwhile; ?>
+        <?php else: ?>
+            <tr>
+                <td colspan="8" style="text-align:center;">No courses found.</td>
+            </tr>
+        <?php endif; ?>
+    </table>
 
 </body>
 </html>

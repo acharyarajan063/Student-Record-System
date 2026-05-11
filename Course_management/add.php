@@ -1,87 +1,140 @@
 <?php
-// add.php - add a new course record
+require_once '../controllers/CourseController.php';
 
-$host = 'localhost';
-$user = 'root';
-$password = '';
-$database = 'student_record_system';
+$controller = new CourseController();
 
-$mysqli = new mysqli($host, $user, $password, $database);
-if ($mysqli->connect_error) {
-    die('Database connection failed: ' . $mysqli->connect_error);
-}
+$error = "";
 
-$message = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $courseName   = trim($_POST['CourseName'] ?? '');
-    $courseCode   = trim($_POST['CourseCode'] ?? '');
-    $creditPoints = trim($_POST['CreditPoints'] ?? '');
-    $startDate    = trim($_POST['StartDate'] ?? '');
-    $teacherID    = trim($_POST['TeacherID'] ?? '');
-    $isActive     = isset($_POST['IsActive']) ? 1 : 0;
 
-    if ($courseName === '' || $courseCode === '' || $creditPoints === '' || $startDate === '' || $teacherID === '') {
-        $message = 'All fields are required.';
+    if (empty($_POST['courseName'])) {
+        $error = "Course Name is required";
+    } elseif (empty($_POST['courseCode'])) {
+        $error = "Course Code is required";
+    } elseif (empty($_POST['creditPoints'])) {
+        $error = "Credit Points is required";
+    } elseif (empty($_POST['startDate'])) {
+        $error = "Start Date is required";
+    } elseif (empty($_POST['teacherID'])) {
+        $error = "Teacher ID is required";
     } else {
-        $stmt = $mysqli->prepare('INSERT INTO course (CourseName, CourseCode, CreditPoints, StartDate, TeacherID, IsActive) VALUES (?, ?, ?, ?, ?, ?)');
-        if ($stmt) {
-            $stmt->bind_param('ssissi', $courseName, $courseCode, $creditPoints, $startDate, $teacherID, $isActive);
-            if ($stmt->execute()) {
-                $stmt->close();
-                header('Location: index.php');
-                exit;
-            }
-            $message = 'Insert failed: ' . $stmt->error;
-            $stmt->close();
-        } else {
-            $message = 'Prepare failed: ' . $mysqli->error;
-        }
+        $controller->store($_POST);
+        header("Location: admin.php");
+        exit();
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Course</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 2rem; }
-        form { max-width: 400px; }
-        label { display: block; margin-bottom: 0.5rem; }
-        input { width: 100%; padding: 0.5rem; margin-bottom: 1rem; }
-        .message { color: red; margin-bottom: 1rem; }
-        .button { padding: 0.6rem 1.2rem; }
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            margin: 2rem;
+        }
+        .container {
+            background: white;
+            max-width: 500px;
+            margin: auto;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h2 { color: #2c3e50; margin-bottom: 1.5rem; }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        label { font-weight: bold; color: #2c3e50; }
+        button {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+        button:hover { background: #219150; }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+        .back-container { text-align: center; margin-top: 1.5rem; }
+        .back-btn {
+            display: inline-block;
+            text-decoration: none;
+            color: #3498db;
+            font-weight: bold;
+        }
+        .back-btn:hover { color: #21618c; }
     </style>
 </head>
 <body>
-    <h1>Add Course</h1>
-    <?php if ($message !== ''): ?>
-        <div class="message"><?php echo htmlspecialchars($message); ?></div>
-    <?php endif; ?>
-    <form method="post" action="add.php">
-        <label for="CourseName">Course Name</label>
-        <input type="text" id="CourseName" name="CourseName" value="<?php echo isset($courseName) ? htmlspecialchars($courseName) : ''; ?>" required>
 
-        <label for="CourseCode">Course Code</label>
-        <input type="text" id="CourseCode" name="CourseCode" value="<?php echo isset($courseCode) ? htmlspecialchars($courseCode) : ''; ?>" required>
+    <div class="container">
 
-        <label for="CreditPoints">Credit Points</label>
-        <input type="number" id="CreditPoints" name="CreditPoints" value="<?php echo isset($creditPoints) ? htmlspecialchars($creditPoints) : ''; ?>" required>
+        <h2>Add Course</h2>
 
-        <label for="StartDate">Start Date</label>
-        <input type="date" id="StartDate" name="StartDate" value="<?php echo isset($startDate) ? htmlspecialchars($startDate) : ''; ?>" required>
+        <?php if (!empty($error)): ?>
+            <div class="error"><?= htmlspecialchars($error) ?></div>
+        <?php endif; ?>
 
-        <label for="TeacherID">Teacher ID</label>
-        <input type="number" id="TeacherID" name="TeacherID" value="<?php echo isset($teacherID) ? htmlspecialchars($teacherID) : ''; ?>" required>
+        <form method="POST">
 
-        <label for="IsActive">Is Active</label>
-        <input type="checkbox" id="IsActive" name="IsActive" value="1" checked>
+            <label>Course Name</label>
+            <input type="text" name="courseName" 
+            placeholder="Enter course name" required>
 
-        <br><br>
-        <button type="submit" class="button">Add Course</button>
-    </form>
-    <p><a href="index.php">Back to list</a></p>
+            <label>Course Code</label>
+            <input type="text" name="courseCode" 
+            placeholder="Enter course code e.g. CS101" required>
+
+            <label>Credit Points</label>
+            <input type="number" name="creditPoints" 
+            placeholder="Enter credit points" min="1" required>
+
+            <label>Start Date</label>
+            <input type="date" name="startDate" required>
+
+            <label>Teacher ID</label>
+            <input type="number" name="teacherID" 
+            placeholder="Enter Teacher ID" required>
+
+            <label>Status</label>
+            <select name="isActive">
+                <option value="1">Active</option>
+                <option value="0">Inactive</option>
+            </select>
+
+            <div class="button-group">
+                <button type="submit">➕ Add Course</button>
+            </div>
+
+        </form>
+
+        <div class="back-container">
+            <a href="admin.php" class="back-btn">← Back to Course List</a>
+        </div>
+
+    </div>
+
 </body>
 </html>

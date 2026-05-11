@@ -51,4 +51,18 @@ class CourseController
     {
         return $this->course->delete($id);
     }
-}
+
+public function search($keyword)
+    {
+        return $this->course->search($keyword);
+    }
+
+    public function filterByStatus($isActive)
+    {
+        return $this->course->filterByStatus($isActive);
+    }
+
+    public function searchAndFilter($keyword, $isActive)
+    {
+        return $this->course->searchAndFilter($keyword, $isActive);
+      }
