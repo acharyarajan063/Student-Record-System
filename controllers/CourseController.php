@@ -65,4 +65,5 @@ public function search($keyword)
     public function searchAndFilter($keyword, $isActive)
     {
         return $this->course->searchAndFilter($keyword, $isActive);
-      }
+    }
+}
