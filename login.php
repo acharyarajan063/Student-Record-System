@@ -50,8 +50,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif ($role === 'admin') {
         $tableName = 'admin';
         $idColumn = 'AdminID';
-        $nameColumn = 'AdminName';
-        $dashboardPath = 'admin_management/admin_dashboard.php';
+        $nameColumn = 'Name';
+        // ✨ NEW PATH: Point it to the dashboard!
+        $dashboardPath = 'student_management/admin_dashboard.php'; 
     }
 
     // Database connection

@@ -15,294 +15,237 @@ $level = $_GET['level'] ?? '';
 |--------------------------------------------------------------------------
 | Search + Filter Logic
 |--------------------------------------------------------------------------
-| If both search and level exist:
-| -> search + filter together
-|
-| If only search exists:
-| -> search students
-|
-| If only level exists:
-| -> filter students
-|
-| Else:
-| -> show all students
-|--------------------------------------------------------------------------
 */
-
 if (!empty($search) && !empty($level)) {
-
     $student = $controller->searchAndFilter($search, $level);
-
 } elseif (!empty($search)) {
-
     $student = $controller->search($search);
-
 } elseif (!empty($level)) {
-
     $student = $controller->filterByLevel($level);
-
 } else {
-
     $student = $controller->index();
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <title>Student Management</title>
-
-    <!-- CSS Styling -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Management - EduCare</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 2rem;
-            background: #f4f4f4;
+        /* Main Content Container */
+        .main-content {
+            padding: 40px;
+            background-color: #f8fafc; /* Matches dashboard background */
+            min-height: 100vh;
+            color: #334155;
+            box-sizing: border-box;
+        }
+
+        /* Header Layout */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
         }
 
         h2 {
-            color: #2c3e50;
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 0;
         }
 
-        /* Add Button */
+        /* Buttons */
         .add-btn {
-            display: inline-block;
-            margin-bottom: 1rem;
-            padding: 0.6rem 1.2rem;
-            background: #27ae60;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: #10b981; /* Green button */
             color: white;
             text-decoration: none;
-            border-radius: 5px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: 0.3s;
+            box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2);
         }
+
+        .add-btn:hover { background: #059669; }
 
         /* Search Form */
-        form {
-            margin-bottom: 1rem;
+        .filter-form {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            align-items: center;
         }
 
-        input,
-        select,
-        button {
-            padding: 0.5rem;
-            margin-right: 0.5rem;
+        .filter-form input,
+        .filter-form select {
+            padding: 10px 15px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            min-width: 200px;
         }
 
-        button {
+        .filter-form input:focus,
+        .filter-form select:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .filter-form button {
             background: #2c3e50;
             color: white;
             border: none;
-            border-radius: 4px;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-weight: 500;
             cursor: pointer;
+            transition: 0.3s;
+            font-family: inherit;
+        }
+
+        .filter-form button:hover { background: #1e293b; }
+
+        /* Table Card Container */
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
         }
 
         /* Table Design */
         table {
             width: 100%;
             border-collapse: collapse;
-            background: white;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
         th {
             background: #2c3e50;
             color: white;
-            padding: 12px;
+            padding: 16px;
             text-align: left;
+            font-weight: 500;
+            font-size: 14px;
+            letter-spacing: 0.5px;
         }
 
         td {
-            padding: 12px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        tr:hover {
-            background: #f1f1f1;
-        }
-
-        /* Action Buttons */
-        .edit-btn {
-            background: #3498db;
-            color: white;
-            padding: 6px 10px;
-            text-decoration: none;
-            border-radius: 4px;
+            padding: 16px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #475569;
             font-size: 14px;
         }
 
-        .delete-btn {
-            background: #e74c3c;
-            color: white;
-            padding: 6px 10px;
+        tr:hover { background: #f8fafc; }
+        tr:last-child td { border-bottom: none; }
+
+        /* Action Buttons inside Table */
+        .edit-btn, .delete-btn {
+            padding: 6px 12px;
             text-decoration: none;
-            border-radius: 4px;
-            font-size: 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            margin-right: 8px;
+            display: inline-block;
+            transition: 0.2s;
         }
+
+        .edit-btn { background: #3b82f6; color: white; }
+        .edit-btn:hover { background: #2563eb; }
+
+        .delete-btn { background: #ef4444; color: white; }
+        .delete-btn:hover { background: #dc2626; }
 
         /* Status Badge */
         .badge {
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 13px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
         }
 
-        .active {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .inactive {
-            background: #f8d7da;
-            color: #721c24;
-        }
-
-        .edit-btn {
-            background: #3498db;
-            color: white;
-            padding: 6px 10px;
-            text-decoration: none;
-            border-radius: 4px;
-            font-size: 14px;
-            margin-right: 6px;
-        }
+        .active { background: #d1fae5; color: #065f46; }
+        .inactive { background: #fee2e2; color: #991b1b; }
     </style>
-
 </head>
 
 <body>
 
-    <!-- Page Title -->
-    <h2>Student Management</h2>
+    <?php include '../navbar.php'; ?>
 
-    <!-- Add Student Button -->
-    <a href="add.php" class="add-btn">
-        ➕ Add New Student
-    </a>
+    <div class="main-content">
+        
+        <div class="page-header">
+            <h2>Student Management</h2>
+            <a href="add.php" class="add-btn">➕ Add New Student</a>
+        </div>
 
-    <!-- Search + Filter Form -->
-    <form method="GET">
+        <form method="GET" class="filter-form">
+            <input type="text" name="search" placeholder="Search student..." value="<?= htmlspecialchars($search) ?>">
+            
+            <select name="level">
+                <option value="">All Levels</option>
+                <option value="Year 1" <?= ($level == 'Year 1') ? 'selected' : '' ?>>Year 1</option>
+                <option value="Year 2" <?= ($level == 'Year 2') ? 'selected' : '' ?>>Year 2</option>
+                <option value="Year 3" <?= ($level == 'Year 3') ? 'selected' : '' ?>>Year 3</option>
+            </select>
+            
+            <button type="submit">Apply Filter</button>
+        </form>
 
-        <!-- Search Input -->
-        <input type="text" name="search" placeholder="Search student..." value="<?= htmlspecialchars($search) ?>">
-
-        <!-- Filter Dropdown -->
-        <select name="level">
-
-            <option value="">All Levels</option>
-
-            <option value="Year 1" <?= ($level == 'Year 1') ? 'selected' : '' ?>>
-                Year 1
-            </option>
-
-            <option value="Year 2" <?= ($level == 'Year 2') ? 'selected' : '' ?>>
-                Year 2
-            </option>
-
-            <option value="Year 3" <?= ($level == 'Year 3') ? 'selected' : '' ?>>
-                Year 3
-            </option>
-
-        </select>
-
-        <!-- Submit Button -->
-        <button type="submit">Apply</button>
-
-    </form>
-
-    <!-- Student Table -->
-    <table>
-
-        <!-- Table Header -->
-        <tr>
-
-            <th>ID</th>
-            <th>Student Name</th>
-            <th>Email</th>
-            <th>Level</th>
-            <th>Status</th>
-            <th>Actions</th>
-
-        </tr>
-
-        <!-- Check if students exist -->
-        <?php if ($student->num_rows > 0): ?>
-
-            <!-- Loop Through Students -->
-            <?php while ($row = $student->fetch_assoc()): ?>
-
+        <div class="table-container">
+            <table>
                 <tr>
-
-                    <!-- Student ID -->
-                    <td>
-                        <?= htmlspecialchars($row['StudentID']) ?>
-                    </td>
-
-                    <!-- Student Name -->
-                    <td>
-                        <?= htmlspecialchars($row['StudentName']) ?>
-                    </td>
-
-                    <!-- Email -->
-                    <td>
-                        <?= htmlspecialchars($row['Email']) ?>
-                    </td>
-
-                    <!-- Level -->
-                    <td>
-                        <?= htmlspecialchars($row['Level']) ?>
-                    </td>
-
-                    <!-- Status -->
-                    <td>
-
-                        <span class="badge <?= $row['IsActive'] ? 'active' : 'inactive' ?>">
-
-                            <?= $row['IsActive'] ? 'Active' : 'Inactive' ?>
-
-                        </span>
-
-                    </td>
-
-                    <!-- Actions -->
-                    <td>
-
-                        <!-- Edit -->
-                        <a href="edit.php?id=<?= $row['StudentID'] ?>" class="edit-btn">
-                            Edit
-                        </a>
-
-                        <!-- Delete -->
-                        <a href="delete.php?id=<?= $row['StudentID'] ?>" class="delete-btn"
-                            onclick="return confirm('Are you sure you want to delete this student?')">
-                            Delete
-                        </a>
-
-                    </td>
-
+                    <th>ID</th>
+                    <th>Student Name</th>
+                    <th>Email</th>
+                    <th>Level</th>
+                    <th>Status</th>
+                    <th>Actions</th>
                 </tr>
 
-            <?php endwhile; ?>
+                <?php if ($student->num_rows > 0): ?>
+                    <?php while ($row = $student->fetch_assoc()): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($row['StudentID']) ?></td>
+                            <td><strong><?= htmlspecialchars($row['StudentName']) ?></strong></td>
+                            <td><?= htmlspecialchars($row['Email']) ?></td>
+                            <td><?= htmlspecialchars($row['Level']) ?></td>
+                            <td>
+                                <span class="badge <?= $row['IsActive'] ? 'active' : 'inactive' ?>">
+                                    <?= $row['IsActive'] ? 'Active' : 'Inactive' ?>
+                                </span>
+                            </td>
+                            <td>
+                                <a href="edit.php?id=<?= $row['StudentID'] ?>" class="edit-btn">Edit</a>
+                                <a href="delete.php?id=<?= $row['StudentID'] ?>" class="delete-btn" onclick="return confirm('Are you sure you want to delete this student?')">Delete</a>
+                            </td>
+                        </tr>
+                    <?php endwhile; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="6" style="text-align:center; padding: 40px; color: #64748b;">
+                            No students found matching your criteria.
+                        </td>
+                    </tr>
+                <?php endif; ?>
+            </table>
+        </div>
 
-        <?php else: ?>
-
-            <!-- No Students Found -->
-            <tr>
-
-                <td colspan="6" style="text-align:center;">
-
-                    No students found.
-
-                </td>
-
-            </tr>
-
-        <?php endif; ?>
-
-    </table>
+    </div>
 
 </body>
-
 </html>
