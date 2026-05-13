@@ -129,6 +129,12 @@ $current_page = basename($_SERVER['PHP_SELF']);
             Courses
         </a>
     </li>
+    <li>
+    <a href="/Student-Record-System/03_Attendance_management/attendance_admin.php"
+    <?php echo ($current_page == 'attendance_admin.php') ? 'class="active"' : ''; ?>>
+        Attendance
+    </a>
+</li>
 
 </ul>
     <div class="nav-profile">
