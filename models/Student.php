@@ -107,4 +107,65 @@ class Student
     return $stmt->get_result();
 }
 
+public function getStudentById($id)
+{
+    $sql = "SELECT * FROM student WHERE StudentID = ?";
+
+    $stmt = $this->conn->prepare($sql);
+
+    $stmt->bind_param("i", $id);
+
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+
+    return $result->fetch_assoc();
+}
+
+public function updateProfile($id, $name, $email, $phone, $password)
+{
+    // Update with password
+    if (!empty($password)) {
+
+        $sql = "UPDATE student
+                SET StudentName=?,
+                    Email=?,
+                    Phone=?,
+                    Password=?
+                WHERE StudentID=?";
+
+        $stmt = $this->conn->prepare($sql);
+
+        $stmt->bind_param(
+            "ssssi",
+            $name,
+            $email,
+            $phone,
+            $password,
+            $id
+        );
+
+    } else {
+
+        // Update without password
+        $sql = "UPDATE student
+                SET StudentName=?,
+                    Email=?,
+                    Phone=?
+                WHERE StudentID=?";
+
+        $stmt = $this->conn->prepare($sql);
+
+        $stmt->bind_param(
+            "sssi",
+            $name,
+            $email,
+            $phone,
+            $id
+        );
+    }
+
+    return $stmt->execute();
+}
+
 }

@@ -178,7 +178,7 @@ $adminName = $_SESSION['user_name'] ?? 'Admin';
 </head>
 <body>
 
-    <?php include '../navbar.php'; ?>
+    <?php include 'navbar.php'; ?>
 
     <div class="main-content">
         

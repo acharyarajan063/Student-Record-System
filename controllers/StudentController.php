@@ -60,4 +60,19 @@ class StudentController
     // Implementation for searching and filtering students
     return $this->student->searchAndFilter($search, $level);
 }
+public function getStudentById($id)
+{
+    return $this->student->getStudentById($id);
+}
+
+public function updateProfile($id, $name, $email, $phone, $password)
+{
+    return $this->student->updateProfile(
+        $id,
+        $name,
+        $email,
+        $phone,
+        $password
+    );
+}
 }

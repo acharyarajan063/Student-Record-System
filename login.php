@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email'] ?? '');
     $password = trim($_POST['password'] ?? '');
     // Capture the role from the hidden input, default to 'student' just in case
-    $role = trim($_POST['role'] ?? 'student'); 
+    $role = trim($_POST['role'] ?? 'student');
 
     // Validation
     if (empty($email) || empty($password)) {
@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $tableName = 'student';
         $idColumn = 'StudentID';
         $nameColumn = 'StudentName';
-        $dashboardPath = 'student_management/student_dashboard.php';
+        $dashboardPath = '01_student_management/student_dashboard.php';
     } elseif ($role === 'teacher') {
         $tableName = 'teacher';
         $idColumn = 'TeacherID';
@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $idColumn = 'AdminID';
         $nameColumn = 'Name';
         // ✨ NEW PATH: Point it to the dashboard!
-        $dashboardPath = 'student_management/admin_dashboard.php'; 
+        $dashboardPath = 'admin_dashboard.php';
     }
 
     // Database connection
@@ -76,6 +76,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['user_id'] = $user[$idColumn];
             $_SESSION['user_name'] = $user[$nameColumn];
             $_SESSION['role'] = $role;
+            if ($role === 'student') {
+
+                $_SESSION['student_id'] = $user['StudentID'];
+
+            } elseif ($role === 'teacher') {
+
+                $_SESSION['teacher_id'] = $user['TeacherID'];
+
+            } elseif ($role === 'admin') {
+
+                $_SESSION['admin_id'] = $user['AdminID'];
+            }
 
             // Redirect to the correct Dashboard
             header("Location: " . $dashboardPath);

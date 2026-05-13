@@ -105,13 +105,13 @@ $current_page = basename($_SERVER['PHP_SELF']);
             <a href="admin_dashboard.php" <?php echo ($current_page == 'admin_dashboard.php') ? 'class="active"' : ''; ?>>Dashboard</a>
         </li>
         <li>
-            <a href="admin.php" <?php echo ($current_page == 'admin.php') ? 'class="active"' : ''; ?>>Students</a>
+            <a href="01_student_management/Student_admin.php" <?php echo ($current_page == '01_student_management/Student_admin.php') ? 'class="active"' : ''; ?>>Students</a>
         </li>
         <li>
-            <a href="teachers.php" <?php echo ($current_page == 'teachers.php') ? 'class="active"' : ''; ?>>Teachers</a>
+            <a href="02_teacher_management/teachers.php" <?php echo ($current_page == '02_teacher_management/teachers.php') ? 'class="active"' : ''; ?>>Teachers</a>
         </li>
         <li>
-            <a href="courses.php" <?php echo ($current_page == 'courses.php') ? 'class="active"' : ''; ?>>Courses</a>
+            <a href="03_course_management/courses.php" <?php echo ($current_page == '03_course_management/courses.php') ? 'class="active"' : ''; ?>>Courses</a>
         </li>
     </ul>
 

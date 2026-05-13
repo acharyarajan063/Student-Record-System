@@ -323,6 +323,7 @@ if ($totalClasses > 0) {
             <li><a href="#">My Courses</a></li>
             <li><a href="#">Grades</a></li>
             <li><a href="#">Attendance</a></li>
+            <li><a href="edit_profile.php">Update Profile</a></li>
         </ul>
         <div class="nav-profile">
             <a href="../logout.php" class="logout-btn">Logout</a>
