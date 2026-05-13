@@ -100,21 +100,37 @@ $current_page = basename($_SERVER['PHP_SELF']);
         🎓 EduCare
     </div>
     
-    <ul class="nav-links">
-        <li>
-            <a href="admin_dashboard.php" <?php echo ($current_page == 'admin_dashboard.php') ? 'class="active"' : ''; ?>>Dashboard</a>
-        </li>
-        <li>
-            <a href="01_student_management/Student_admin.php" <?php echo ($current_page == '01_student_management/Student_admin.php') ? 'class="active"' : ''; ?>>Students</a>
-        </li>
-        <li>
-            <a href="02_teacher_management/teachers.php" <?php echo ($current_page == '02_teacher_management/teachers.php') ? 'class="active"' : ''; ?>>Teachers</a>
-        </li>
-        <li>
-            <a href="03_course_management/courses.php" <?php echo ($current_page == '03_course_management/courses.php') ? 'class="active"' : ''; ?>>Courses</a>
-        </li>
-    </ul>
+   <ul class="nav-links">
 
+    <li>
+        <a href="/Student-Record-System/admin_dashboard.php"
+        <?php echo ($current_page == 'admin_dashboard.php') ? 'class="active"' : ''; ?>>
+            Dashboard
+        </a>
+    </li>
+
+    <li>
+        <a href="/Student-Record-System/01_student_management/student_admin.php"
+        <?php echo ($current_page == 'student_admin.php') ? 'class="active"' : ''; ?>>
+            Students
+        </a>
+    </li>
+
+    <li>
+        <a href="/Student-Record-System/02_teacher_management/teachers.php"
+        <?php echo ($current_page == 'teachers.php') ? 'class="active"' : ''; ?>>
+            Teachers
+        </a>
+    </li>
+
+    <li>
+        <a href="/Student-Record-System/04_course_management/courses.php"
+        <?php echo ($current_page == 'courses.php') ? 'class="active"' : ''; ?>>
+            Courses
+        </a>
+    </li>
+
+</ul>
     <div class="nav-profile">
         <span><?php echo htmlspecialchars($_SESSION['user_name'] ?? 'Admin User'); ?></span>
         <a href="../logout.php" class="logout-btn">Logout</a>

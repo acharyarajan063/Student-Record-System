@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 06, 2026 at 10:02 AM
+-- Generation Time: May 13, 2026 at 10:33 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -20,6 +20,26 @@ SET time_zone = "+00:00";
 --
 -- Database: `student_record_system`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `admin`
+--
+
+CREATE TABLE `admin` (
+  `AdminID` int(11) NOT NULL,
+  `Name` varchar(100) DEFAULT NULL,
+  `Email` varchar(100) DEFAULT NULL,
+  `Password` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `admin`
+--
+
+INSERT INTO `admin` (`AdminID`, `Name`, `Email`, `Password`) VALUES
+(2, 'System Admin', 'admin@gmail.com', '$2y$10$fEIGD.HY6gdM/wmChH1KkewOZvUlbyYOcArAj7SKbodFRmrpZLHLK');
 
 -- --------------------------------------------------------
 
@@ -42,8 +62,6 @@ CREATE TABLE `attendance` (
 --
 
 INSERT INTO `attendance` (`AttendanceID`, `StudentID`, `CourseID`, `AttendanceDate`, `Status`, `RecordedBy`, `IsExcused`) VALUES
-(1, 1, 9, '2024-09-10', 'Present', 'Samuel Agbesi', 0),
-(2, 1, 10, '2024-09-11', 'Late', 'Samia Ahmed', 0),
 (3, 2, 9, '2024-09-10', 'Absent', 'Samuel Agbesi', 1),
 (4, 2, 11, '2024-09-11', 'Present', 'Bernice Bryan', 0),
 (5, 3, 10, '2024-09-12', 'Present', 'Samia Ahmed', 0),
@@ -52,12 +70,10 @@ INSERT INTO `attendance` (`AttendanceID`, `StudentID`, `CourseID`, `AttendanceDa
 (8, 4, 13, '2024-09-13', 'Late', 'Steffen Herskind', 0),
 (9, 5, 11, '2024-09-14', 'Present', 'Bernice Bryan', 0),
 (10, 5, 14, '2024-09-14', 'Absent', 'Jesper Jorgensen', 1),
-(11, 6, 10, '2024-09-15', 'Present', 'Samia Ahmed', 0),
 (12, 7, 15, '2024-09-16', 'Present', 'Mudassar Kamal', 0),
 (13, 8, 16, '2024-09-16', 'Late', 'Dimitrios Papadimitriou', 0),
 (14, 9, 12, '2024-09-17', 'Absent', 'Youcef Gheraibia', 1),
 (15, 10, 13, '2024-09-17', 'Present', 'Steffen Herskind', 0),
-(16, 1, 9, '2024-09-18', 'Present', 'Samuel Agbesi', 0),
 (17, 2, 9, '2024-09-18', 'Present', 'Samuel Agbesi', 0),
 (18, 3, 10, '2024-09-18', 'Late', 'Samia Ahmed', 0),
 (19, 4, 9, '2024-09-18', 'Absent', 'Samuel Agbesi', 0),
@@ -111,8 +127,6 @@ CREATE TABLE `enrollment` (
 --
 
 INSERT INTO `enrollment` (`EnrollmentID`, `StudentID`, `CourseID`, `EnrollDate`) VALUES
-(16, 1, 9, '2024-09-02'),
-(17, 1, 10, '2024-09-02'),
 (18, 2, 9, '2024-09-02'),
 (19, 2, 11, '2024-09-02'),
 (20, 3, 10, '2024-09-03'),
@@ -121,7 +135,6 @@ INSERT INTO `enrollment` (`EnrollmentID`, `StudentID`, `CourseID`, `EnrollDate`)
 (23, 4, 13, '2024-09-03'),
 (24, 5, 11, '2024-09-04'),
 (25, 5, 14, '2024-09-04'),
-(26, 6, 10, '2024-09-04'),
 (27, 7, 15, '2024-09-05'),
 (28, 8, 16, '2024-09-05'),
 (29, 9, 12, '2024-09-05'),
@@ -148,8 +161,6 @@ CREATE TABLE `grade` (
 --
 
 INSERT INTO `grade` (`GradeID`, `StudentID`, `CourseID`, `Marks`, `GradeLetter`, `DateRecorded`, `isPassed`) VALUES
-(1, 1, 9, 85.50, 'A', '2024-12-01 09:00:00', 1),
-(2, 1, 10, 78.00, 'B', '2024-12-01 09:05:00', 1),
 (3, 2, 9, 65.00, 'C', '2024-12-01 09:10:00', 1),
 (4, 2, 11, 55.00, 'D', '2024-12-01 09:15:00', 1),
 (5, 3, 10, 40.00, 'F', '2024-12-01 09:20:00', 0),
@@ -158,7 +169,6 @@ INSERT INTO `grade` (`GradeID`, `StudentID`, `CourseID`, `Marks`, `GradeLetter`,
 (8, 4, 13, 88.00, 'A', '2024-12-01 09:35:00', 1),
 (9, 5, 11, 67.00, 'C', '2024-12-01 09:40:00', 1),
 (10, 5, 14, 49.00, 'F', '2024-12-01 09:45:00', 0),
-(11, 6, 10, 74.00, 'B', '2024-12-01 09:50:00', 1),
 (12, 7, 15, 82.00, 'A', '2024-12-01 09:55:00', 1),
 (13, 8, 16, 59.00, 'D', '2024-12-01 10:00:00', 1),
 (14, 9, 12, 77.00, 'B', '2024-12-01 10:05:00', 1),
@@ -177,25 +187,28 @@ CREATE TABLE `student` (
   `Level` varchar(100) DEFAULT NULL COMMENT 'Academic level e.g. Year 1, Year 2, Postgraduate',
   `DateOfBirth` date DEFAULT NULL COMMENT 'Date of birth of student',
   `DateEnrolled` datetime DEFAULT NULL COMMENT 'The date the student was registered on the system',
-  `IsActive` tinyint(1) DEFAULT NULL COMMENT 'TRUE if student account is active, FALSE if deactivated'
+  `IsActive` tinyint(1) DEFAULT NULL COMMENT 'TRUE if student account is active, FALSE if deactivated',
+  `Password` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `student`
 --
 
-INSERT INTO `student` (`StudentID`, `StudentName`, `Email`, `Level`, `DateOfBirth`, `DateEnrolled`, `IsActive`) VALUES
-(1, 'Rajesh Sharma', 'rajesh.sharma@gmail.com', 'Year 1', '2002-05-14', '2024-09-01 10:00:00', 1),
-(2, 'Sita Thapa', 'sita.thapa@gmail.com', 'Year 2', '2001-08-22', '2023-09-01 10:00:00', 1),
-(3, 'Bikash Gurung', 'bikash.gurung@gmail.com', 'Year 3', '2000-12-10', '2022-09-01 10:00:00', 1),
-(4, 'Anisha Rai', 'anisha.rai@gmail.com', 'Year 1', '2003-03-18', '2024-09-01 10:00:00', 1),
-(5, 'Prakash Magar', 'prakash.magar@gmail.com', 'Year 2', '2001-07-25', '2023-09-01 10:00:00', 1),
-(6, 'Nabin Karki', 'nabin.karki@gmail.com', 'Year 3', '2000-11-05', '2022-09-01 10:00:00', 1),
-(7, 'Pooja Adhikari', 'pooja.adhikari@gmail.com', 'Year 1', '2002-09-30', '2024-09-01 10:00:00', 1),
-(8, 'Deepak Tamang', 'deepak.tamang@gmail.com', 'Year 2', '2001-01-12', '2023-09-01 10:00:00', 1),
-(9, 'Sunita Lama', 'sunita.lama@gmail.com', 'Year 3', '2000-06-28', '2022-09-01 10:00:00', 1),
-(10, 'Ramesh Bhandari', 'ramesh.bhandari@gmail.com', 'Year 1', '2003-04-09', '2024-09-01 10:00:00', 1),
-(11, 'Test User', 'test@example.com', 'Year 1', '2000-01-01', '2026-05-05 00:00:00', 1);
+INSERT INTO `student` (`StudentID`, `StudentName`, `Email`, `Level`, `DateOfBirth`, `DateEnrolled`, `IsActive`, `Password`) VALUES
+(2, 'Sita Thapaa', 'sita.1thapa@gmail.com', 'Year 1', '2001-08-22', NULL, 1, '1234'),
+(3, 'Bikash Gurung', 'bikash.gurung@gmail.com', 'Year 3', '2000-12-10', '2022-09-01 10:00:00', 1, '1234'),
+(4, 'Anisha Rai', 'anisha.rai@gmail.com', 'Year 1', '2003-03-18', '2024-09-01 10:00:00', 1, '1234'),
+(5, 'Prakash Magar', 'prakash.magar@gmail.com', 'Year 2', '2001-07-25', '2023-09-01 10:00:00', 1, '1234'),
+(7, 'Pooja Adhikari', 'pooja.adhikari@gmail.com', 'Year 1', '2002-09-30', '2024-09-01 10:00:00', 1, '1234'),
+(8, 'Deepak Tamang', 'deepak.tamang@gmail.com', 'Year 2', '2001-01-12', '2023-09-01 10:00:00', 1, '1234'),
+(9, 'Sunita Lama', 'sunita.lama@gmail.com', 'Year 3', '2000-06-28', '2022-09-01 10:00:00', 1, '1234'),
+(10, 'Ramesh Bhandari', 'ramesh.bhandari@gmail.com', 'Year 1', '2003-04-09', '2024-09-01 10:00:00', 1, '1234'),
+(11, 'Test User', 'test@example.com', 'Year 1', '2000-01-01', '2026-05-05 00:00:00', 1, '1234'),
+(16, 'Aarchan Adhikari', 'aarchana041@gmail.com', 'Year 2', '2026-05-22', '2026-05-29 00:00:00', 1, '1234'),
+(17, 'Aarchan Adhikari', 'rajesh.sharma@gmail.com', 'Year 1', '2026-05-26', '2026-05-19 00:00:00', 1, '1234'),
+(18, 'Sita Thapa', 'sita.thapa@gmail.com', 'Year 1', NULL, '2026-05-09 15:49:49', 1, '$2y$10$3Cq7Vd4uyHg98LLjoYFJUeJvPha.vQdY3/204hfG1ILdEeJwyq1ru'),
+(19, 'Rajani Shrestha', 'raj.ani@gmail.com', 'Year 3', NULL, NULL, 1, '$2y$10$4RIYn73/AkBPJlyI1D5h.uQq1uLOJzvRwEep90DmXqM4VNK4B29cy');
 
 -- --------------------------------------------------------
 
@@ -204,7 +217,7 @@ INSERT INTO `student` (`StudentID`, `StudentName`, `Email`, `Level`, `DateOfBirt
 --
 
 CREATE TABLE `teacher` (
-  `TeacheID` int(11) NOT NULL,
+  `TeacherID` int(11) NOT NULL,
   `TeacherName` varchar(100) DEFAULT NULL,
   `Email` varchar(100) DEFAULT NULL,
   `Department` varchar(50) DEFAULT NULL,
@@ -216,7 +229,7 @@ CREATE TABLE `teacher` (
 -- Dumping data for table `teacher`
 --
 
-INSERT INTO `teacher` (`TeacheID`, `TeacherName`, `Email`, `Department`, `DateJoined`, `IsActive`) VALUES
+INSERT INTO `teacher` (`TeacherID`, `TeacherName`, `Email`, `Department`, `DateJoined`, `IsActive`) VALUES
 (1, 'Samuel Agbesi', 'samuel.agbesi@edu.nielsbrock.dk', 'Computer Science', '2022-01-10', 1),
 (2, 'Samia Ahmed', 'samia.ahmed@edu.nielsbrock.dk', 'Computer Science', '2021-09-15', 1),
 (3, 'Bernice Bryan', 'bernice.bryan@edu.nielsbrock.dk', 'IT', '2020-08-20', 1),
@@ -251,6 +264,13 @@ INSERT INTO `users` (`id`, `username`, `password`, `role`) VALUES
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `admin`
+--
+ALTER TABLE `admin`
+  ADD PRIMARY KEY (`AdminID`),
+  ADD UNIQUE KEY `Email` (`Email`);
 
 --
 -- Indexes for table `attendance`
@@ -294,7 +314,7 @@ ALTER TABLE `student`
 -- Indexes for table `teacher`
 --
 ALTER TABLE `teacher`
-  ADD PRIMARY KEY (`TeacheID`);
+  ADD PRIMARY KEY (`TeacherID`);
 
 --
 -- Indexes for table `users`
@@ -305,6 +325,12 @@ ALTER TABLE `users`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `admin`
+--
+ALTER TABLE `admin`
+  MODIFY `AdminID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `attendance`
@@ -334,13 +360,13 @@ ALTER TABLE `grade`
 -- AUTO_INCREMENT for table `student`
 --
 ALTER TABLE `student`
-  MODIFY `StudentID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Auto-incremented unique identifier for each student', AUTO_INCREMENT=12;
+  MODIFY `StudentID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Auto-incremented unique identifier for each student', AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `teacher`
 --
 ALTER TABLE `teacher`
-  MODIFY `TeacheID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `TeacherID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -363,7 +389,7 @@ ALTER TABLE `attendance`
 -- Constraints for table `course`
 --
 ALTER TABLE `course`
-  ADD CONSTRAINT `course_ibfk_1` FOREIGN KEY (`TeacherID`) REFERENCES `teacher` (`TeacheID`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `course_ibfk_1` FOREIGN KEY (`TeacherID`) REFERENCES `teacher` (`TeacherID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `enrollment`
