@@ -1,10 +1,17 @@
 <?php
-if (!isset($_SESSION['role'])) {
+session_start();
+
+if (
+    !isset($_SESSION['role']) ||
+    $_SESSION['role'] != 'admin'
+) {
     header("Location: ../index.php");
     exit();
 }
 
 include("../navbar.php");
+
+
 require_once '../controllers/EnrollmentController.php';
 require_once '../database/db.php';
 

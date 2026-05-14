@@ -1,5 +1,10 @@
 <?php
-if (!isset($_SESSION['role']) || $_SESSION['role'] != 'teacher') {
+session_start();
+
+if (
+    !isset($_SESSION['role']) ||
+    ($_SESSION['role'] != 'admin' && $_SESSION['role'] != 'teacher')
+) {
     header("Location: ../index.php");
     exit();
 }
@@ -159,7 +164,7 @@ if(!empty($search)){
 
 <body>
 
-<?php include '../navbar.php'; ?>
+
 
 <div class="main-content">
 
