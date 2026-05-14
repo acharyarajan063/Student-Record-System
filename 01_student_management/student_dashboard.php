@@ -1,6 +1,10 @@
 <?php
+if (!isset($_SESSION['role']) || $_SESSION['role'] != 'student') {
+    header("Location: ../index.php");
+    exit();
+}
 
-session_start();
+include("../navbar.php");
 
 require_once '../database/db.php';
 

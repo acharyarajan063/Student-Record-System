@@ -1,5 +1,10 @@
 <?php
+if (!isset($_SESSION['role'])) {
+    header("Location: ../index.php");
+    exit();
+}
 
+include("../navbar.php");
 require_once '../controllers/Grade_Controller.php';
 
 $controller = new GradeController();

@@ -1,4 +1,10 @@
 <?php
+if (!isset($_SESSION['role']) || $_SESSION['role'] != 'teacher') {
+    header("Location: ../index.php");
+    exit();
+}
+
+include("../navbar.php");
 
 require_once '../controllers/teachercontroller.php';
 

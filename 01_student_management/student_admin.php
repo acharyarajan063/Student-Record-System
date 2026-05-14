@@ -1,4 +1,14 @@
 <?php
+
+session_start();
+
+if (!isset($_SESSION['role'])) {
+    header("Location: ../index.php");
+    exit();
+}
+
+include("../navbar.php");
+
 // Include Student Controller
 require_once '../controllers/StudentController.php';
 

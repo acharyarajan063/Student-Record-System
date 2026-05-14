@@ -2,6 +2,13 @@
 // Start session
 session_start();
 
+if (!isset($_SESSION['role'])) {
+    header("Location: index.php");
+    exit();
+}
+
+include("navbar.php");
+
 // Basic security check (optional but recommended)
 // if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
 //     header("Location: ../index.php");

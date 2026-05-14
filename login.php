@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $tableName = 'teacher';
         $idColumn = 'TeacherID';
         $nameColumn = 'TeacherName';
-        $dashboardPath = 'teacher_management/teacher_dashboard.php';
+        $dashboardPath = '02_teacher_management/teacher_dashboard.php';
     } elseif ($role === 'admin') {
         $tableName = 'admin';
         $idColumn = 'AdminID';
