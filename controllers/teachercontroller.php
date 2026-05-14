@@ -1,88 +1,63 @@
 <?php
-require_once("../models/teacher.php");
 
-$teacher = new Teacher();
+require_once __DIR__ . '/../models/teacher.php';
 
-// ADD TEACHER
-if (isset($_POST['addTeacher'])) {
+class TeacherController
+{
+    private $teacher;
 
-    $name       = $_POST['name'];
-    $email      = $_POST['email'];
-    $department = $_POST['department'];
-    $dateJoined = $_POST['dateJoined'];
-
-    if ($teacher->emailExists($email)) {
-        header("Location: ../Teacher_management/index.php?error=duplicate_email");
-        exit();
+    public function __construct()
+    {
+        $this->teacher = new Teacher();
     }
 
-    if ($dateJoined > date('Y-m-d')) {
-        header("Location: ../Teacher_management/index.php?error=future_date");
-        exit();
+    // Show All Teachers
+    public function index()
+    {
+        return $this->teacher->getAll();
     }
 
-    $teacher->create($name, $email, $department, $dateJoined, 1);
-
-    header("Location: ../Teacher_management/index.php?success=added");
-    exit();
-}
-
-// UPDATE TEACHER
-if (isset($_POST['updateTeacher'])) {
-
-    $id         = (int) $_POST['teacherID'];
-    $name       = $_POST['name'];
-    $email      = $_POST['email'];
-    $department = $_POST['department'];
-    $dateJoined = $_POST['dateJoined'];
-
-    if ($teacher->emailExists($email, $id)) {
-        header("Location: ../Teacher_management/edit.php?id=$id&error=duplicate_email");
-        exit();
+    // Add Teacher
+    public function store($data)
+    {
+        return $this->teacher->create(
+            $data['name'],
+            $data['email'],
+            $data['department'],
+            $data['date_joined'],
+            $data['is_active']
+        );
     }
 
-    if ($dateJoined > date('Y-m-d')) {
-        header("Location: ../Teacher_management/edit.php?id=$id&error=future_date");
-        exit();
+    // Edit Teacher
+    public function edit($id)
+    {
+        return $this->teacher->getById($id);
     }
 
-    $teacher->update($id, $name, $email, $department, $dateJoined, 1);
+    // Update Teacher
+    public function update($data)
+    {
+        return $this->teacher->update(
+            $data['id'],
+            $data['name'],
+            $data['email'],
+            $data['department'],
+            $data['date_joined'],
+            $data['is_active']
+        );
+    }
 
-    header("Location: ../Teacher_management/index.php?success=updated");
-    exit();
-}
+    // Delete Teacher
+    public function destroy($id)
+    {
+        return $this->teacher->delete($id);
+    }
 
-// ASSIGN COURSE TO TEACHER
-if (isset($_POST['assignCourse'])) {
-
-    $courseId  = (int) $_POST['courseID'];
-    $teacherId = (int) $_POST['teacherID'];
-
-    $teacher->assignCourse($courseId, $teacherId);
-
-    header("Location: ../Teacher_management/assign_courses.php?success=1");
-    exit();
-}
-
-// UNASSIGN TEACHER FROM COURSE
-if (isset($_GET['unassign'])) {
-
-    $courseId = (int) $_GET['unassign'];
-
-    $teacher->unassignCourse($courseId);
-
-    header("Location: ../Teacher_management/assign_courses.php?success=unassigned");
-    exit();
-}
-
-// DEACTIVATE TEACHER
-if (isset($_GET['delete'])) {
-
-    $id = (int) $_GET['delete'];
-
-    $teacher->deactivate($id);
-
-    header("Location: ../Teacher_management/index.php");
-    exit();
+    // Search Teacher
+    public function search($keyword)
+    {
+        return $this->teacher->search($keyword);
+    }
 }
 ?>

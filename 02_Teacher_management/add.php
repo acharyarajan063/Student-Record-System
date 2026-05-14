@@ -4,18 +4,10 @@ require_once '../controllers/teachercontroller.php';
 
 $controller = new TeacherController();
 
-// Get Teacher ID
-$id = $_GET['id'] ?? 0;
-
-// Get Teacher Data
-$teacher = $controller->edit($id);
-
-// Update Teacher
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
-    $controller->update([
+    $controller->store([
 
-        'id' => $id,
         'name' => $_POST['name'],
         'email' => $_POST['email'],
         'department' => $_POST['department'],
@@ -39,7 +31,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
     <meta charset="UTF-8">
 
-    <title>Edit Teacher</title>
+    <title>Add Teacher</title>
 
     <link
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
@@ -122,7 +114,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
     <div class="card">
 
-        <h2>Edit Teacher</h2>
+        <h2>Add Teacher</h2>
 
         <form method="POST">
 
@@ -133,7 +125,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                 <input
                     type="text"
                     name="name"
-                    value="<?= $teacher['TeacherName'] ?>"
                     required
                 >
 
@@ -146,7 +137,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                 <input
                     type="email"
                     name="email"
-                    value="<?= $teacher['Email'] ?>"
                     required
                 >
 
@@ -159,7 +149,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                 <input
                     type="text"
                     name="department"
-                    value="<?= $teacher['Department'] ?>"
                     required
                 >
 
@@ -172,7 +161,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                 <input
                     type="date"
                     name="date_joined"
-                    value="<?= $teacher['DateJoined'] ?>"
                     required
                 >
 
@@ -184,18 +172,16 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
                 <select name="is_active">
 
-                    <option
-                        value="1"
-                        <?= $teacher['IsActive'] ? 'selected' : '' ?>
-                    >
+                    <option value="1">
+
                         Active
+
                     </option>
 
-                    <option
-                        value="0"
-                        <?= !$teacher['IsActive'] ? 'selected' : '' ?>
-                    >
+                    <option value="0">
+
                         Inactive
+
                     </option>
 
                 </select>
@@ -204,7 +190,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
             <button type="submit">
 
-                Update Teacher
+                Add Teacher
 
             </button>
 
