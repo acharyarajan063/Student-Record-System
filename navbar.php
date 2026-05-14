@@ -135,6 +135,11 @@ $current_page = basename($_SERVER['PHP_SELF']);
         Attendance
     </a>
 </li>
+<li>
+    <a href="/Student-Record-System/06_Enrollment_management/enrollment_admin.php">
+        Enrollment
+    </a>
+</li>
 
 </ul>
     <div class="nav-profile">

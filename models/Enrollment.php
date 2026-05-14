@@ -21,7 +21,7 @@ class Enrollment
             enrollment.EnrollmentID,
             student.StudentName,
             course.CourseName,
-            enrollment.EnrollDate
+            enrollment.EnrollmentDate
         FROM enrollment
         INNER JOIN student
             ON enrollment.StudentID = student.StudentID
@@ -44,7 +44,7 @@ class Enrollment
         (
             StudentID,
             CourseID,
-            EnrollDate
+            EnrollmentDate
         )
         VALUES
         (

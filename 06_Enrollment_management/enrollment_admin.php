@@ -209,7 +209,7 @@ $courses = $conn->query(
 
                 <td><?= $row['CourseName'] ?></td>
 
-                <td><?= $row['EnrollDate'] ?></td>
+                <td><?= $row['EnrollmentDate'] ?></td>
 
                 <td>
 
