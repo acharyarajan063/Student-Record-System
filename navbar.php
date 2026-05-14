@@ -136,8 +136,15 @@ $current_page = basename($_SERVER['PHP_SELF']);
     </a>
 </li>
 <li>
-    <a href="/Student-Record-System/06_Enrollment_management/enrollment_admin.php">
+    <a href="/Student-Record-System/06_Enrollment_management/enrollment_admin.php"
+    <?php echo ($current_page == 'enrollment_admin.php') ? 'class="active"' : ''; ?>>
         Enrollment
+    </a>
+</li>
+<li>
+    <a href="/Student-Record-System/05_Grade_management/grade_dashboard.php"
+    <?php echo ($current_page == 'grade_dashboard.php') ? 'class="active"' : ''; ?>>
+        Grades
     </a>
 </li>
 
