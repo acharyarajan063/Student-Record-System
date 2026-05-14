@@ -83,7 +83,12 @@ body{
 }
 
 .main-content{
+
+    margin-left:250px;
+
     padding:40px;
+
+    min-height:100vh;
 }
 
 .page-title{
@@ -191,7 +196,11 @@ body{
 
 @media(max-width:768px){
 
+    
     .main-content{
+
+        margin-left:0;
+
         padding:20px;
     }
 
