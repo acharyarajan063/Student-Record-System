@@ -1,4 +1,5 @@
 <?php
+
 require_once __DIR__ . '/../models/course.php';
 
 class CourseController
@@ -10,60 +11,74 @@ class CourseController
         $this->course = new Course();
     }
 
+    // List All Courses
     public function index()
     {
-        // Implementation for listing all courses
         return $this->course->getAll();
     }
 
+    // Add Course
     public function store($data)
     {
         return $this->course->create(
-            $data['courseName'],
-            $data['courseCode'],
-            $data['creditPoints'],
-            $data['startDate'],
-            $data['teacherID'],
-            $data['isActive']
+
+            $data['course_name'],
+            $data['course_code'],
+            $data['credit_points'],
+            $data['start_date'],
+            $data['is_active'],
+            $data['teacher_id']
+
         );
     }
 
+    // Get Single Course
     public function edit($id)
     {
-        //
         return $this->course->getById($id);
     }
 
+    // Update Course
     public function update($data)
     {
         return $this->course->update(
+
             $data['id'],
-            $data['courseName'],
-            $data['courseCode'],
-            $data['creditPoints'],
-            $data['startDate'],
-            $data['teacherID'],
-            $data['isActive']
+            $data['course_name'],
+            $data['course_code'],
+            $data['credit_points'],
+            $data['start_date'],
+            $data['is_active'],
+            $data['teacher_id']
+
         );
     }
 
+    // Delete Course
     public function destroy($id)
     {
         return $this->course->delete($id);
     }
 
-public function search($keyword)
+    // Search Course
+    public function search($keyword)
     {
         return $this->course->search($keyword);
     }
 
-    public function filterByStatus($isActive)
+    // Filter Course
+    public function filter($status)
     {
-        return $this->course->filterByStatus($isActive);
+        return $this->course->filter($status);
     }
 
-    public function searchAndFilter($keyword, $isActive)
+    // Search + Filter
+    public function searchAndFilter($keyword, $status)
     {
-        return $this->course->searchAndFilter($keyword, $isActive);
+        return $this->course->searchAndFilter(
+            $keyword,
+            $status
+        );
     }
 }
+?>

@@ -1,36 +1,43 @@
 <?php
+
 require_once '../controllers/CourseController.php';
 
-// Create controller object
 $controller = new CourseController();
 
-// Get course ID from URL
 $id = $_GET['id'];
 
-// Get course data
 $course = $controller->edit($id);
 
-// Error variable
 $error = "";
 
-// Check if form submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    if (empty($_POST['courseName'])) {
-        $error = "Course Name is required";
-    } elseif (empty($_POST['courseCode'])) {
-        $error = "Course Code is required";
-    } elseif (empty($_POST['creditPoints'])) {
-        $error = "Credit Points is required";
-    } elseif (empty($_POST['startDate'])) {
-        $error = "Start Date is required";
-    } elseif (empty($_POST['teacherID'])) {
-        $error = "Teacher ID is required";
+    if (empty($_POST['course_name'])) {
+
+        $error = "Course name is required";
+
+    } elseif (empty($_POST['course_code'])) {
+
+        $error = "Course code is required";
+
+    } elseif (empty($_POST['credit_points'])) {
+
+        $error = "Credit points required";
+
+    } elseif (empty($_POST['start_date'])) {
+
+        $error = "Start date required";
+
+    } elseif (empty($_POST['teacher_id'])) {
+
+        $error = "Teacher ID required";
+
     } else {
-        // Update course
+
         $controller->update($_POST);
-        // Redirect back
-        header("Location: admin.php");
+
+        header("Location: course_admin.php");
+
         exit();
     }
 }
@@ -38,133 +45,262 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Edit Course</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f4f4;
-            margin: 2rem;
-        }
-        .container {
-            background: white;
-            max-width: 500px;
-            margin: auto;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        h2 { color: #2c3e50; margin-bottom: 1.5rem; }
-        .error {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 1rem;
-        }
-        input, select {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            margin-bottom: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
-        label { font-weight: bold; color: #2c3e50; }
-        button {
-            background: #3498db;
-            color: white;
-            border: none;
-            padding: 12px 18px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 15px;
-        }
-        button:hover { background: #2980b9; }
-        .button-group {
-            display: flex;
-            justify-content: center;
-            margin-top: 1.5rem;
-        }
-        .back-container { text-align: center; margin-top: 1.5rem; }
-        .back-btn {
-            display: inline-block;
-            text-decoration: none;
-            color: #3498db;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-        .back-btn:hover { color: #21618c; }
-    </style>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
+<title>Edit Course</title>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+rel="stylesheet"
+>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins', sans-serif;
+}
+
+body{
+    background:#f8fafc;
+}
+
+.main-content{
+    padding:40px;
+}
+
+.form-card{
+
+    max-width:700px;
+
+    background:white;
+
+    padding:40px;
+
+    border-radius:18px;
+
+    box-shadow:
+    0 5px 20px rgba(0,0,0,0.06);
+}
+
+h2{
+    margin-bottom:30px;
+    color:#1e293b;
+}
+
+.input-group{
+    margin-bottom:20px;
+}
+
+label{
+
+    display:block;
+
+    margin-bottom:8px;
+
+    font-weight:600;
+}
+
+input,
+select{
+
+    width:100%;
+
+    padding:14px;
+
+    border:1px solid #cbd5e1;
+
+    border-radius:10px;
+
+    outline:none;
+}
+
+input:focus,
+select:focus{
+    border-color:#3b82f6;
+}
+
+.btn{
+
+    width:100%;
+
+    border:none;
+
+    padding:14px;
+
+    border-radius:10px;
+
+    background:#3b82f6;
+
+    color:white;
+
+    font-weight:600;
+
+    cursor:pointer;
+}
+
+.btn:hover{
+    background:#2563eb;
+}
+
+.error{
+
+    background:#fee2e2;
+
+    color:#991b1b;
+
+    padding:12px;
+
+    border-radius:10px;
+
+    margin-bottom:20px;
+}
+
+</style>
+
 </head>
+
 <body>
 
-    <div class="container">
+<?php include '../navbar.php'; ?>
 
-        <h2>Edit Course</h2>
+<div class="main-content">
 
-        <!-- Error Message -->
-        <?php if (!empty($error)): ?>
-            <div class="error"><?= htmlspecialchars($error) ?></div>
-        <?php endif; ?>
+<div class="form-card">
 
-        <!-- Edit Form -->
-        <form method="POST">
+<h2>Edit Course</h2>
 
-            <!-- Hidden Course ID -->
-            <input type="hidden" name="id" value="<?= $course['CourseID'] ?>">
+<?php if (!empty($error)): ?>
 
-            <!-- Course Name -->
-            <label>Course Name</label>
-            <input type="text" name="courseName" 
-            value="<?= htmlspecialchars($course['CourseName']) ?>">
+<div class="error">
 
-            <!-- Course Code -->
-            <label>Course Code</label>
-            <input type="text" name="courseCode" 
-            value="<?= htmlspecialchars($course['CourseCode']) ?>">
+<?= $error ?>
 
-            <!-- Credit Points -->
-            <label>Credit Points</label>
-            <input type="number" name="creditPoints" 
-            value="<?= htmlspecialchars($course['CreditPoints']) ?>">
+</div>
 
-            <!-- Start Date -->
-            <label>Start Date</label>
-            <input type="date" name="startDate" 
-            value="<?= htmlspecialchars($course['StartDate']) ?>">
+<?php endif; ?>
 
-            <!-- Teacher ID -->
-            <label>Teacher ID</label>
-            <input type="number" name="teacherID" 
-            value="<?= htmlspecialchars($course['TeacherID']) ?>">
+<form method="POST">
 
-            <!-- Status -->
-            <label>Status</label>
-            <select name="isActive">
-                <option value="1" <?= ($course['IsActive'] == 1) ? 'selected' : '' ?>>
-                    Active
-                </option>
-                <option value="0" <?= ($course['IsActive'] == 0) ? 'selected' : '' ?>>
-                    Inactive
-                </option>
-            </select>
+<input
+type="hidden"
+name="id"
+value="<?= $course['CourseID'] ?>"
+>
 
-            <!-- Update Button -->
-            <div class="button-group">
-                <button type="submit">✏️ Update Course</button>
-            </div>
+<div class="input-group">
 
-        </form>
+<label>Course Name</label>
 
-        <!-- Back Link -->
-        <div class="back-container">
-            <a href="admin.php" class="back-btn">← Back to Course List</a>
-        </div>
+<input
+type="text"
+name="course_name"
+value="<?= htmlspecialchars($course['CourseName']) ?>"
+>
 
-    </div>
+</div>
+
+<div class="input-group">
+
+<label>Course Code</label>
+
+<input
+type="text"
+name="course_code"
+value="<?= htmlspecialchars($course['CourseCode']) ?>"
+>
+
+</div>
+
+<div class="input-group">
+
+<label>Credit Points</label>
+
+<input
+type="number"
+name="credit_points"
+value="<?= $course['CreditPoints'] ?>"
+>
+
+</div>
+
+<div class="input-group">
+
+<label>Start Date</label>
+
+<input
+type="date"
+name="start_date"
+value="<?= $course['StartDate'] ?>"
+>
+
+</div>
+
+<div class="input-group">
+
+<label>Teacher ID</label>
+
+<input
+type="number"
+name="teacher_id"
+value="<?= $course['TeacherID'] ?>"
+>
+
+</div>
+
+<div class="input-group">
+
+<label>Status</label>
+
+<select name="is_active">
+
+<option
+value="1"
+<?= $course['IsActive'] ? 'selected' : '' ?>
+>
+
+Active
+
+</option>
+
+<option
+value="0"
+<?= !$course['IsActive'] ? 'selected' : '' ?>
+>
+
+Inactive
+
+</option>
+
+</select>
+
+</div>
+
+<button
+type="submit"
+class="btn"
+>
+
+Update Course
+
+</button>
+
+</form>
+
+</div>
+
+</div>
 
 </body>
+
 </html>
