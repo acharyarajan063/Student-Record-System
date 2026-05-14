@@ -1,164 +1,153 @@
-
 <?php
+
 require_once '../controllers/AttendanceController.php';
 
 $controller = new AttendanceController();
 
-// Get attendance records
 $attendance = $controller->index();
+
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Attendance Management - EduCare</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Attendance Management</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
 
     <style>
 
-        .main-content {
-            padding: 40px;
-            background-color: #f8fafc;
-            min-height: 100vh;
-            color: #334155;
-            box-sizing: border-box;
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Poppins',sans-serif;
         }
 
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
+        body{
+            background:#f8fafc;
         }
 
-        h2 {
-            font-size: 28px;
-            font-weight: 700;
-            color: #1e293b;
-            margin: 0;
+        .main-content{
+            padding:40px;
+            margin-left:250px;
         }
 
-        .mark-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 20px;
-            background: #10b981;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 500;
-            transition: 0.3s;
-            box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2);
+        .top-bar{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:30px;
         }
 
-        .mark-btn:hover {
-            background: #059669;
+        .top-bar h1{
+            font-size:32px;
+            color:#1e293b;
         }
 
-        .filter-form {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 25px;
-            align-items: center;
+        .add-btn{
+            background:#2563eb;
+            color:white;
+            text-decoration:none;
+            padding:12px 20px;
+            border-radius:10px;
+            font-weight:600;
+            transition:0.3s;
         }
 
-        .filter-form input,
-        .filter-form select {
-            padding: 10px 15px;
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
-            font-size: 14px;
-            font-family: inherit;
-            outline: none;
-            min-width: 200px;
+        .add-btn:hover{
+            background:#1d4ed8;
         }
 
-        .filter-form input:focus,
-        .filter-form select:focus {
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        .table-container{
+            background:white;
+            border-radius:18px;
+            overflow:hidden;
+            box-shadow:0 8px 20px rgba(0,0,0,0.08);
         }
 
-        .filter-form button {
-            background: #2c3e50;
-            color: white;
-            border: none;
-            padding: 10px 24px;
-            border-radius: 8px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: 0.3s;
-            font-family: inherit;
+        table{
+            width:100%;
+            border-collapse:collapse;
         }
 
-        .filter-form button:hover {
-            background: #1e293b;
+        th{
+            background:#1e293b;
+            color:white;
+            padding:16px;
+            text-align:left;
+            font-size:14px;
         }
 
-        .table-container {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            overflow: hidden;
+        td{
+            padding:16px;
+            border-bottom:1px solid #e2e8f0;
+            font-size:14px;
+            color:#334155;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
+        tr:hover{
+            background:#f8fafc;
         }
 
-        th {
-            background: #2c3e50;
-            color: white;
-            padding: 16px;
-            text-align: left;
-            font-weight: 500;
-            font-size: 14px;
-            letter-spacing: 0.5px;
+        .status{
+            padding:6px 12px;
+            border-radius:20px;
+            font-size:12px;
+            font-weight:600;
         }
 
-        td {
-            padding: 16px;
-            border-bottom: 1px solid #e2e8f0;
-            color: #475569;
-            font-size: 14px;
+        .present{
+            background:#dcfce7;
+            color:#166534;
         }
 
-        tr:hover {
-            background: #f8fafc;
+        .absent{
+            background:#fee2e2;
+            color:#991b1b;
         }
 
-        tr:last-child td {
-            border-bottom: none;
+        .late{
+            background:#fef3c7;
+            color:#92400e;
         }
 
-        .badge {
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
+        .action-btn{
+            padding:7px 12px;
+            border-radius:8px;
+            text-decoration:none;
+            color:white;
+            font-size:13px;
+            font-weight:500;
+            margin-right:5px;
         }
 
-        .present {
-            background: #d1fae5;
-            color: #065f46;
+        .edit-btn{
+            background:#0ea5e9;
         }
 
-        .absent {
-            background: #fee2e2;
-            color: #991b1b;
+        .delete-btn{
+            background:#ef4444;
         }
 
-        .late {
-            background: #fef3c7;
-            color: #92400e;
+        .edit-btn:hover{
+            background:#0284c7;
+        }
+
+        .delete-btn:hover{
+            background:#dc2626;
         }
 
     </style>
+
 </head>
 
 <body>
@@ -167,95 +156,107 @@ $attendance = $controller->index();
 
 <div class="main-content">
 
-    <div class="page-header">
-        <h2>Attendance Management</h2>
+    <div class="top-bar">
 
-        <a href="mark_attendance.php" class="mark-btn">
-            ➕ Mark Attendance
+        <h1>Attendance Management</h1>
+
+        <a href="add.php" class="add-btn">
+
+            + Add Attendance
+
         </a>
+
     </div>
-
-    <form method="GET" class="filter-form">
-
-        <input
-            type="text"
-            name="search"
-            placeholder="Search student..."
-        >
-
-        <input
-            type="date"
-            name="date"
-        >
-
-        <select name="status">
-            <option value="">All Status</option>
-            <option value="Present">Present</option>
-            <option value="Absent">Absent</option>
-            <option value="Late">Late</option>
-        </select>
-
-        <button type="submit">
-            Apply Filter
-        </button>
-
-    </form>
 
     <div class="table-container">
 
         <table>
 
             <tr>
+
                 <th>ID</th>
-                <th>Student Name</th>
+                <th>Student</th>
+                <th>Course</th>
                 <th>Date</th>
                 <th>Status</th>
+                <th>Recorded By</th>
+                <th>Excused</th>
+                <th>Actions</th>
+
             </tr>
 
-            <?php if ($attendance && $attendance->num_rows > 0): ?>
-
-                <?php while ($row = $attendance->fetch_assoc()): ?>
-
-                    <tr>
-
-                        <td>
-                            <?= htmlspecialchars($row['AttendanceID']) ?>
-                        </td>
-
-                        <td>
-                            <strong>
-                                <?= htmlspecialchars($row['StudentName']) ?>
-                            </strong>
-                        </td>
-
-                        <td>
-                            <?= htmlspecialchars($row['AttendanceDate']) ?>
-                        </td>
-
-                        <td>
-
-                            <span class="badge 
-                                <?= strtolower($row['Status']) ?>">
-
-                                <?= htmlspecialchars($row['Status']) ?>
-
-                            </span>
-
-                        </td>
-
-                    </tr>
-
-                <?php endwhile; ?>
-
-            <?php else: ?>
+            <?php while($row = $attendance->fetch_assoc()): ?>
 
                 <tr>
-                    <td colspan="4" style="text-align:center; padding:40px; color:#64748b;">
-                        No attendance records found.
+
+                    <td>
+
+                        <?= $row['AttendanceID'] ?>
+
                     </td>
+
+                    <td>
+
+                        <?= $row['StudentName'] ?>
+
+                    </td>
+
+                    <td>
+
+                        <?= $row['CourseName'] ?>
+
+                    </td>
+
+                    <td>
+
+                        <?= $row['AttendanceDate'] ?>
+
+                    </td>
+
+                    <td>
+
+                        <span class="status <?= strtolower($row['Status']) ?>">
+
+                            <?= $row['Status'] ?>
+
+                        </span>
+
+                    </td>
+
+                    <td>
+
+                        <?= $row['RecordedBy'] ?>
+
+                    </td>
+
+                    <td>
+
+                        <?= $row['IsExcused'] ? 'Yes' : 'No' ?>
+
+                    </td>
+
+                    <td>
+
+                        <a href="edit.php?id=<?= $row['AttendanceID'] ?>"
+                           class="action-btn edit-btn">
+
+                            Edit
+
+                        </a>
+
+                        <a href="delete.php?id=<?= $row['AttendanceID'] ?>"
+                           class="action-btn delete-btn"
+                           onclick="return confirm('Delete this attendance?')">
+
+                            Delete
+
+                        </a>
+
+                    </td>
+
                 </tr>
 
-            <?php endif; ?>
+            <?php endwhile; ?>
 
         </table>
 
@@ -265,5 +266,3 @@ $attendance = $controller->index();
 
 </body>
 </html>
-
-

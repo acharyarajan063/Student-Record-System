@@ -117,15 +117,15 @@ $current_page = basename($_SERVER['PHP_SELF']);
     </li>
 
     <li>
-        <a href="/Student-Record-System/02_teacher_management/teachers.php"
-        <?php echo ($current_page == 'teachers.php') ? 'class="active"' : ''; ?>>
+        <a href="/Student-Record-System/02_teacher_management/teacher_admin.php"
+        <?php echo ($current_page == 'teacher_admin.php') ? 'class="active"' : ''; ?>>
             Teachers
         </a>
     </li>
 
     <li>
-        <a href="/Student-Record-System/04_course_management/courses.php"
-        <?php echo ($current_page == 'courses.php') ? 'class="active"' : ''; ?>>
+        <a href="/Student-Record-System/04_course_management/course_admin.php"
+        <?php echo ($current_page == 'course_admin.php') ? 'class="active"' : ''; ?>>
             Courses
         </a>
     </li>
