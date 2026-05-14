@@ -206,7 +206,7 @@ body{
 
 <body>
 
-<?php include '../student_navbar.php'; ?>
+<?php include '../navbar.php'; ?>
 
 <div class="main-content">
 

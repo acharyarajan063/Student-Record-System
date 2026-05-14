@@ -185,6 +185,7 @@ $grades = $stmt->get_result();
 </head>
 
 <body>
+    <?php include '../navbar.php'; ?>
 
 <div class="dashboard">
 
