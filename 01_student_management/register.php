@@ -10,22 +10,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = trim($_POST['email']);
     $password = trim($_POST['password']);
     $level = trim($_POST['level']);
+    $DateOfBirth = trim($_POST['dob']); 
+    $DateEnrolled = date('Y-m-d');
 
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
     $sql = "INSERT INTO student
-    (StudentName, Email, Password, Level,DateOfBirth, IsActive)
-    VALUES (?, ?, ?, ?, ?, 1)";
+    (StudentName, Email, Password, Level,DateOfBirth, DateEnrolled, IsActive)
+    VALUES (?, ?, ?, ?, ?, NOW(), 1)";
 
     $stmt = $conn->prepare($sql);
 
     $stmt->bind_param(
-        "ssssss",
+        "sssss",
         $name,
         $email,
         $hashedPassword,
         $level,
-        $dateOfBirth
+        $DateOfBirth,
+      
     );
 
     if ($stmt->execute()) {

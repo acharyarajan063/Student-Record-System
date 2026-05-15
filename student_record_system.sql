@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 13, 2026 at 10:33 AM
+-- Generation Time: May 15, 2026 at 06:56 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -74,10 +74,8 @@ INSERT INTO `attendance` (`AttendanceID`, `StudentID`, `CourseID`, `AttendanceDa
 (13, 8, 16, '2024-09-16', 'Late', 'Dimitrios Papadimitriou', 0),
 (14, 9, 12, '2024-09-17', 'Absent', 'Youcef Gheraibia', 1),
 (15, 10, 13, '2024-09-17', 'Present', 'Steffen Herskind', 0),
-(17, 2, 9, '2024-09-18', 'Present', 'Samuel Agbesi', 0),
 (18, 3, 10, '2024-09-18', 'Late', 'Samia Ahmed', 0),
-(19, 4, 9, '2024-09-18', 'Absent', 'Samuel Agbesi', 0),
-(20, 5, 11, '2024-09-18', 'Present', 'Bernice Bryan', 0);
+(19, 4, 9, '2024-09-18', 'Absent', 'Samuel Agbesi', 0);
 
 -- --------------------------------------------------------
 
@@ -107,7 +105,8 @@ INSERT INTO `course` (`CourseID`, `CourseName`, `CourseCode`, `CreditPoints`, `S
 (13, 'Software Engineering', 'CS105', 10, '2024-09-01', 1, 5),
 (14, 'Data Structures', 'CS106', 10, '2024-09-01', 1, 6),
 (15, 'Operating Systems', 'CS107', 10, '2024-09-01', 1, 7),
-(16, 'Cyber Security', 'CS108', 10, '2024-09-01', 1, 8);
+(16, 'Cyber Security', 'CS108', 10, '2024-09-01', 1, 8),
+(19, 'BSC CSIT', 'CS0606', 60, '2026-05-14', 1, 7);
 
 -- --------------------------------------------------------
 
@@ -119,14 +118,14 @@ CREATE TABLE `enrollment` (
   `EnrollmentID` int(11) NOT NULL COMMENT 'Unique identifier for enrolment ',
   `StudentID` int(11) NOT NULL COMMENT 'References for the student who is enrolled. Links to Student. StudentID.',
   `CourseID` int(11) NOT NULL COMMENT 'References to the course the student is enrolled on. Links to Course. CourseID.',
-  `EnrollDate` date NOT NULL COMMENT 'The date the student was officially enrolled on the course. System-generated.'
+  `EnrollmentDate` date NOT NULL COMMENT 'The date the student was officially enrolled on the course. System-generated.'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `enrollment`
 --
 
-INSERT INTO `enrollment` (`EnrollmentID`, `StudentID`, `CourseID`, `EnrollDate`) VALUES
+INSERT INTO `enrollment` (`EnrollmentID`, `StudentID`, `CourseID`, `EnrollmentDate`) VALUES
 (18, 2, 9, '2024-09-02'),
 (19, 2, 11, '2024-09-02'),
 (20, 3, 10, '2024-09-03'),
@@ -138,7 +137,11 @@ INSERT INTO `enrollment` (`EnrollmentID`, `StudentID`, `CourseID`, `EnrollDate`)
 (27, 7, 15, '2024-09-05'),
 (28, 8, 16, '2024-09-05'),
 (29, 9, 12, '2024-09-05'),
-(30, 10, 13, '2024-09-06');
+(30, 10, 13, '2024-09-06'),
+(31, 3, 11, '2026-05-13'),
+(32, 2, 10, '2026-05-19'),
+(33, 19, 12, '2026-05-21'),
+(34, 19, 11, '2026-05-20');
 
 -- --------------------------------------------------------
 
@@ -172,7 +175,8 @@ INSERT INTO `grade` (`GradeID`, `StudentID`, `CourseID`, `Marks`, `GradeLetter`,
 (12, 7, 15, 82.00, 'A', '2024-12-01 09:55:00', 1),
 (13, 8, 16, 59.00, 'D', '2024-12-01 10:00:00', 1),
 (14, 9, 12, 77.00, 'B', '2024-12-01 10:05:00', 1),
-(15, 10, 13, 69.00, 'C', '2024-12-01 10:10:00', 1);
+(15, 10, 13, 69.00, 'C', '2024-12-01 10:10:00', 1),
+(16, 3, 10, 90.00, 'A+', NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -208,7 +212,9 @@ INSERT INTO `student` (`StudentID`, `StudentName`, `Email`, `Level`, `DateOfBirt
 (16, 'Aarchan Adhikari', 'aarchana041@gmail.com', 'Year 2', '2026-05-22', '2026-05-29 00:00:00', 1, '1234'),
 (17, 'Aarchan Adhikari', 'rajesh.sharma@gmail.com', 'Year 1', '2026-05-26', '2026-05-19 00:00:00', 1, '1234'),
 (18, 'Sita Thapa', 'sita.thapa@gmail.com', 'Year 1', NULL, '2026-05-09 15:49:49', 1, '$2y$10$3Cq7Vd4uyHg98LLjoYFJUeJvPha.vQdY3/204hfG1ILdEeJwyq1ru'),
-(19, 'Rajani Shrestha', 'raj.ani@gmail.com', 'Year 3', NULL, NULL, 1, '$2y$10$4RIYn73/AkBPJlyI1D5h.uQq1uLOJzvRwEep90DmXqM4VNK4B29cy');
+(19, 'Rajani Shrestha', 'raj.ani@gmail.com', 'Year 3', NULL, NULL, 1, '$2y$10$9ZWo4KIDp5kZ5WXPCtMSwuF4t4L5CFykHnwyAW6PH6K7M7KBMMbMi'),
+(20, 'Saharsha Ghimire', 'saharsha123@gmail.com', 'Year 1', NULL, NULL, 1, '$2y$10$ZJogu8xRZFHtwtpruobR2.XGwMpJgYRiP2xruXlIoW7MWIk0Xebbm'),
+(21, 'Aarchana Acharya', 'acharyaarchana063@gmail.com', 'Year 1', '2002-05-21', NULL, 1, '$2y$10$rr2jE.b6tLc3DDRvSruF.ub2g.7P3ZJHiqFLZspOBP5ZWNDCD7kgO');
 
 -- --------------------------------------------------------
 
@@ -220,46 +226,28 @@ CREATE TABLE `teacher` (
   `TeacherID` int(11) NOT NULL,
   `TeacherName` varchar(100) DEFAULT NULL,
   `Email` varchar(100) DEFAULT NULL,
-  `Department` varchar(50) DEFAULT NULL,
+  `Department` enum('IT','Networking','Data Science','Software Engineering') DEFAULT NULL,
   `DateJoined` date DEFAULT NULL,
-  `IsActive` tinyint(1) DEFAULT NULL
+  `IsActive` tinyint(1) DEFAULT NULL,
+  `Password` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `teacher`
 --
 
-INSERT INTO `teacher` (`TeacherID`, `TeacherName`, `Email`, `Department`, `DateJoined`, `IsActive`) VALUES
-(1, 'Samuel Agbesi', 'samuel.agbesi@edu.nielsbrock.dk', 'Computer Science', '2022-01-10', 1),
-(2, 'Samia Ahmed', 'samia.ahmed@edu.nielsbrock.dk', 'Computer Science', '2021-09-15', 1),
-(3, 'Bernice Bryan', 'bernice.bryan@edu.nielsbrock.dk', 'IT', '2020-08-20', 1),
-(4, 'Youcef Gheraibia', 'youcef.gheraibia@edu.nielsbrock.dk', 'Networking', '2021-03-05', 1),
-(5, 'Steffen Herskind', 'steffen.herskind@edu.nielsbrock.dk', 'Software Eng', '2019-11-11', 1),
-(6, 'Jesper Jorgensen', 'jesper.jorgensen@edu.nielsbrock.dk', 'Data Science', '2020-06-01', 1),
-(7, 'Mudassar Kamal', 'mudassar.kamal@edu.nielsbrock.dk', 'Cyber Security', '2022-02-14', 1),
-(8, 'Dimitrios Papadimitriou', 'dimitrios.p@edu.nielsbrock.dk', 'Computer Science', '2018-07-23', 1),
-(9, 'Maeve Anne Paris', 'maeve.paris@edu.nielsbrock.dk', 'IT', '2021-05-30', 1),
-(10, 'Arti Ranjan', 'arti.ranjan@edu.nielsbrock.dk', 'Software Eng', '2023-01-12', 1);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `users`
---
-
-CREATE TABLE `users` (
-  `id` int(11) NOT NULL,
-  `username` varchar(50) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `role` enum('admin','teacher','student') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `users`
---
-
-INSERT INTO `users` (`id`, `username`, `password`, `role`) VALUES
-(1, 'admin', '1234', 'admin');
+INSERT INTO `teacher` (`TeacherID`, `TeacherName`, `Email`, `Department`, `DateJoined`, `IsActive`, `Password`) VALUES
+(1, 'Samuel Agbesi', 'samuel.agbesi@edu.nielsbrock.dk', '', '2022-01-10', 1, '$2y$10$c.WMuq9LcL.gIj9BHfghXOPXTjxE4D9BbdI5Hsla/11S4zPMj2ulC'),
+(2, 'Samia Ahmed', 'samia.ahmed@edu.nielsbrock.dk', '', '2021-09-15', 1, NULL),
+(3, 'Bernice Bryan', 'bernice.bryan@edu.nielsbrock.dk', 'IT', '2020-08-20', 1, NULL),
+(4, 'Youcef Gheraibia', 'youcef.gheraibia@edu.nielsbrock.dk', 'Networking', '2021-03-05', 1, NULL),
+(5, 'Steffen Herskind', 'steffen.herskind@edu.nielsbrock.dk', '', '2019-11-11', 1, NULL),
+(6, 'Jesper Jorgensen', 'jesper.jorgensen@edu.nielsbrock.dk', 'Data Science', '2020-06-01', 1, NULL),
+(7, 'Mudassar Kamal', 'mudassar.kamal@edu.nielsbrock.dk', '', '2022-02-14', 1, NULL),
+(8, 'Dimitrios Papadimitriou', 'dimitrios.p@edu.nielsbrock.dk', '', '2018-07-23', 1, NULL),
+(9, 'Maeve Anne Paris', 'maeve.paris@edu.nielsbrock.dk', 'IT', '2021-05-30', 1, NULL),
+(10, 'Arti Ranjan', 'arti.ranjan@edu.nielsbrock.dk', '', '2023-01-12', 1, NULL),
+(11, 'Rajan Prasad Acharya', 'acharyarajan063@gmail.com', 'IT', '2026-05-14', 1, NULL);
 
 --
 -- Indexes for dumped tables
@@ -317,12 +305,6 @@ ALTER TABLE `teacher`
   ADD PRIMARY KEY (`TeacherID`);
 
 --
--- Indexes for table `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`);
-
---
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -342,37 +324,31 @@ ALTER TABLE `attendance`
 -- AUTO_INCREMENT for table `course`
 --
 ALTER TABLE `course`
-  MODIFY `CourseID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Auto-incremented unique identifier for each course', AUTO_INCREMENT=17;
+  MODIFY `CourseID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Auto-incremented unique identifier for each course', AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `enrollment`
 --
 ALTER TABLE `enrollment`
-  MODIFY `EnrollmentID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Unique identifier for enrolment ', AUTO_INCREMENT=31;
+  MODIFY `EnrollmentID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Unique identifier for enrolment ', AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `grade`
 --
 ALTER TABLE `grade`
-  MODIFY `GradeID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Unique Identifier for each grade entry', AUTO_INCREMENT=16;
+  MODIFY `GradeID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Unique Identifier for each grade entry', AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `student`
 --
 ALTER TABLE `student`
-  MODIFY `StudentID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Auto-incremented unique identifier for each student', AUTO_INCREMENT=20;
+  MODIFY `StudentID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Auto-incremented unique identifier for each student', AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `teacher`
 --
 ALTER TABLE `teacher`
-  MODIFY `TeacherID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
-
---
--- AUTO_INCREMENT for table `users`
---
-ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `TeacherID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- Constraints for dumped tables
