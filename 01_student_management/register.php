@@ -1,121 +1,41 @@
 <?php
+require_once("../database/db.php");
 
-require_once '../database/db.php';
+$db = new Database();
+$conn = $db->connect();
 
-$conn = (new Database())->connect();
+if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
-$error = "";
-$success = "";
-
-/*
-|--------------------------------------------------------------------------
-| Registration Form Submit
-|--------------------------------------------------------------------------
-*/
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    // Get form values
     $name = trim($_POST['name']);
     $email = trim($_POST['email']);
-    $level = trim($_POST['level']);
     $password = trim($_POST['password']);
+    $level = trim($_POST['level']);
 
-    /*
-    |--------------------------------------------------------------------------
-    | Validation
-    |--------------------------------------------------------------------------
-    */
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-    if (empty($name)) {
+    $sql = "INSERT INTO student
+    (StudentName, Email, Password, Level, IsActive)
+    VALUES (?, ?, ?, ?, 1)";
 
-        $error = "Name is required";
+    $stmt = $conn->prepare($sql);
 
-    } elseif (empty($email)) {
+    $stmt->bind_param(
+        "ssss",
+        $name,
+        $email,
+        $hashedPassword,
+        $level
+    );
 
-        $error = "Email is required";
+    if($stmt->execute()){
 
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        header("Location: ../index.php?registered=success");
+        exit();
 
-        $error = "Invalid email format";
+    }else{
 
-    } elseif (empty($level)) {
+        $error = "Registration Failed";
 
-        $error = "Please select level";
-
-    } elseif (empty($password)) {
-
-        $error = "Password is required";
-
-    } else {
-
-        /*
-        |--------------------------------------------------------------------------
-        | Check Existing Email
-        |--------------------------------------------------------------------------
-        */
-
-        $check = $conn->prepare(
-            "SELECT * FROM student WHERE Email = ?"
-        );
-
-        $check->bind_param("s", $email);
-
-        $check->execute();
-
-        $result = $check->get_result();
-
-        if ($result->num_rows > 0) {
-
-            $error = "Email already exists";
-
-        } else {
-
-            /*
-            |--------------------------------------------------------------------------
-            | Insert Student
-            |--------------------------------------------------------------------------
-            */
-
-            $hashedPassword = password_hash(
-                $password,
-                PASSWORD_DEFAULT
-            );
-
-            $sql = "
-                INSERT INTO student
-                (
-                    StudentName,
-                    Email,
-                    Level,
-                    Password,
-                    IsActive
-                )
-                VALUES
-                (
-                    ?, ?, ?, ?, 1
-                )
-            ";
-
-            $stmt = $conn->prepare($sql);
-
-            $stmt->bind_param(
-                "ssss",
-                $name,
-                $email,
-                $level,
-                $hashedPassword
-            );
-
-            if ($stmt->execute()) {
-
-                $success = "Registration successful";
-
-            } else {
-
-                $error = "Something went wrong";
-            }
-        }
     }
 }
 ?>
@@ -127,10 +47,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <meta charset="UTF-8">
 
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>Student Registration</title>
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
 
     <style>
 
@@ -138,38 +65,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             margin:0;
             padding:0;
             box-sizing:border-box;
-            font-family:'Poppins', sans-serif;
+            font-family:'Poppins',sans-serif;
         }
 
         body{
-            min-height:100vh;
+            background:#f1f5f9;
             display:flex;
             justify-content:center;
             align-items:center;
-            background:linear-gradient(135deg,#4f46e5,#ff00cc);
-            padding:20px;
+            min-height:100vh;
         }
 
         .register-card{
-
-            width:100%;
-            max-width:500px;
-
+            width:450px;
             background:white;
-
             padding:40px;
-
             border-radius:25px;
-
-            box-shadow:0 10px 30px rgba(0,0,0,0.15);
+            box-shadow:0 10px 30px rgba(0,0,0,0.08);
         }
 
-        h2{
-            text-align:center;
-            margin-bottom:30px;
+        h1{
             color:#1e293b;
-            font-size:34px;
-            font-weight:700;
+            margin-bottom:10px;
+            font-size:36px;
+        }
+
+        p{
+            color:#64748b;
+            margin-bottom:30px;
         }
 
         .input-group{
@@ -185,99 +108,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         input,
         select{
-
             width:100%;
-
-            padding:14px 16px;
-
+            padding:14px;
             border:1px solid #cbd5e1;
-
             border-radius:12px;
-
             font-size:15px;
-
-            transition:0.3s;
-        }
-
-        input:focus,
-        select:focus{
-
-            outline:none;
-
-            border-color:#7c3aed;
-
-            box-shadow:0 0 0 4px rgba(124,58,237,0.15);
         }
 
         .btn{
-
             width:100%;
-
-            border:none;
-
-            padding:15px;
-
-            border-radius:12px;
-
-            background:linear-gradient(135deg,#4f46e5,#ff00cc);
-
+            background:#2563eb;
             color:white;
-
+            border:none;
+            padding:15px;
+            border-radius:12px;
             font-size:16px;
-
             font-weight:600;
-
             cursor:pointer;
-
             transition:0.3s;
         }
 
         .btn:hover{
-
-            transform:translateY(-2px);
-
-            box-shadow:0 8px 20px rgba(124,58,237,0.3);
+            background:#1d4ed8;
         }
 
         .error{
-
             background:#fee2e2;
-
             color:#991b1b;
-
             padding:12px;
-
             border-radius:10px;
-
-            margin-bottom:20px;
-        }
-
-        .success{
-
-            background:#dcfce7;
-
-            color:#166534;
-
-            padding:12px;
-
-            border-radius:10px;
-
             margin-bottom:20px;
         }
 
         .login-link{
-
             margin-top:20px;
-
             text-align:center;
         }
 
         .login-link a{
-
-            color:#4f46e5;
-
+            color:#2563eb;
             text-decoration:none;
-
             font-weight:600;
         }
 
@@ -287,119 +157,130 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <body>
 
-    <div class="register-card">
+<div class="register-card">
 
-        <h2>Student Registration</h2>
+    <h1>
 
-        <!-- Error -->
-        <?php if (!empty($error)): ?>
+        Student Register
 
-            <div class="error">
+    </h1>
 
-                <?= $error ?>
+    <p>
 
-            </div>
+        Create your student account.
 
-        <?php endif; ?>
+    </p>
 
-        <!-- Success -->
-        <?php if (!empty($success)): ?>
+    <?php if(isset($error)): ?>
 
-            <div class="success">
+        <div class="error">
 
-                <?= $success ?>
-
-            </div>
-
-        <?php endif; ?>
-
-        <!-- Registration Form -->
-        <form method="POST">
-
-            <div class="input-group">
-
-                <label>Full Name</label>
-
-                <input
-                    type="text"
-                    name="name"
-                    placeholder="Enter full name"
-                >
-
-            </div>
-
-            <div class="input-group">
-
-                <label>Email Address</label>
-
-                <input
-                    type="email"
-                    name="email"
-                    placeholder="Enter email address"
-                >
-
-            </div>
-
-            <div class="input-group">
-
-                <label>Academic Level</label>
-
-                <select name="level">
-
-                    <option value="">
-                        Select Level
-                    </option>
-
-                    <option value="Year 1">
-                        Year 1
-                    </option>
-
-                    <option value="Year 2">
-                        Year 2
-                    </option>
-
-                    <option value="Year 3">
-                        Year 3
-                    </option>
-
-                </select>
-
-            </div>
-
-            <div class="input-group">
-
-                <label>Password</label>
-
-                <input
-                    type="password"
-                    name="password"
-                    placeholder="Create password"
-                >
-
-            </div>
-
-            <button type="submit" class="btn">
-
-                Register Account
-
-            </button>
-
-        </form>
-
-        <div class="login-link">
-
-            Already have an account?
-
-            <a href="../index.php">
-
-                Login Here
-
-            </a>
+            <?= $error ?>
 
         </div>
 
+    <?php endif; ?>
+
+    <form method="POST">
+
+        <div class="input-group">
+
+            <label>
+
+                Full Name
+
+            </label>
+
+            <input
+                type="text"
+                name="name"
+                required
+            >
+
+        </div>
+
+        <div class="input-group">
+
+            <label>
+
+                Email
+
+            </label>
+
+            <input
+                type="email"
+                name="email"
+                required
+            >
+
+        </div>
+
+        <div class="input-group">
+
+            <label>
+
+                Password
+
+            </label>
+
+            <input
+                type="password"
+                name="password"
+                required
+            >
+
+        </div>
+
+        <div class="input-group">
+
+            <label>
+
+                Level
+
+            </label>
+
+            <select name="level" required>
+
+                <option value="Year 1">
+                    Year 1
+                </option>
+
+                <option value="Year 2">
+                    Year 2
+                </option>
+
+                <option value="Year 3">
+                    Year 3
+                </option>
+
+            </select>
+
+        </div>
+
+        <button
+            type="submit"
+            class="btn"
+        >
+
+            Register
+
+        </button>
+
+    </form>
+
+    <div class="login-link">
+
+        Already have account?
+
+        <a href="../index.php">
+
+            Login
+
+        </a>
+
     </div>
 
-</body>
+</div>
 
+</body>
 </html>

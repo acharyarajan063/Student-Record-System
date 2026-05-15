@@ -124,7 +124,7 @@ if($courseResult && $courseResult->num_rows > 0){
                 </form>
 
                 <div class="bottom-text">
-                    Need access? <a href="student_management/register.php">Register as Student</a>
+                    Need access? <a href="01_student_management/register.php">Register as Student</a>
                 </div>
             </div>
         </div>
