@@ -1,3 +1,57 @@
+<?php
+require_once "database/db.php";
+
+$db = new Database();
+$conn = $db->connect();
+
+/*
+|------------------------------------------------------------
+| GET TOTAL COUNTS
+|------------------------------------------------------------
+*/
+
+$studentCount = 0;
+$teacherCount = 0;
+$courseCount = 0;
+
+/* Students */
+
+$studentQuery = "SELECT COUNT(*) AS total FROM student";
+$studentResult = $conn->query($studentQuery);
+
+if($studentResult && $studentResult->num_rows > 0){
+
+    $studentData = $studentResult->fetch_assoc();
+    $studentCount = $studentData['total'];
+
+}
+
+/* Teachers */
+
+$teacherQuery = "SELECT COUNT(*) AS total FROM teacher";
+$teacherResult = $conn->query($teacherQuery);
+
+if($teacherResult && $teacherResult->num_rows > 0){
+
+    $teacherData = $teacherResult->fetch_assoc();
+    $teacherCount = $teacherData['total'];
+
+}
+
+/* Courses */
+
+$courseQuery = "SELECT COUNT(*) AS total FROM course";
+$courseResult = $conn->query($courseQuery);
+
+if($courseResult && $courseResult->num_rows > 0){
+
+    $courseData = $courseResult->fetch_assoc();
+    $courseCount = $courseData['total'];
+
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,15 +74,15 @@
                 
                 <div class="stats">
                     <div class="stat-card">
-                        <h2>1240</h2>
+                        <h2><?= $studentCount ?></h2>
                         <span>Students</span>
                     </div>
                     <div class="stat-card">
-                        <h2>86</h2>
+                        <h2><?= $teacherCount ?></h2>
                         <span>Teachers</span>
                     </div>
                     <div class="stat-card">
-                        <h2>34</h2>
+                        <h2><?= $courseCount ?></h2>
                         <span>Courses</span>
                     </div>
                 </div>
