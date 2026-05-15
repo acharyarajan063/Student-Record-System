@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $tableName = 'admin';
         $idColumn = 'AdminID';
         $nameColumn = 'Name';
-        // ✨ NEW PATH: Point it to the dashboard!
+        // Admins can be redirected to a common dashboard or a specific one
         $dashboardPath = 'admin_dashboard.php';
     }
 

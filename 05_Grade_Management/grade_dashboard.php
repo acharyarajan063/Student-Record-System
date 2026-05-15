@@ -89,7 +89,7 @@ $grades = $stmt->get_result();
 
         .dashboard {
 
-            margin-left: 250px;
+          
 
             padding: 40px;
         }

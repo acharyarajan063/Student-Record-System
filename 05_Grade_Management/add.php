@@ -1,4 +1,13 @@
 <?php
+session_start();
+
+if (
+    !isset($_SESSION['role']) ||
+    ($_SESSION['role'] != 'admin' && $_SESSION['role'] != 'teacher')
+) {
+    header("Location: ../index.php");
+    exit();
+}
 
 require_once '../controllers/Grade_Controller.php';
 require_once '../database/db.php';

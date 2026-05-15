@@ -9,14 +9,13 @@ if (
     exit();
 }
 
-include("../navbar.php");
-
 require_once '../controllers/AttendanceController.php';
 
 $controller = new AttendanceController();
 
 $attendance = $controller->index();
 
+include("../navbar.php");
 ?>
 
 <!DOCTYPE html>
@@ -26,254 +25,317 @@ $attendance = $controller->index();
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Attendance Management</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-          rel="stylesheet">
+        rel="stylesheet">
 
     <style>
-
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
-            font-family:'Poppins',sans-serif;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
         }
 
-        body{
-            background:#f8fafc;
+        body {
+            background: #f8fafc;
         }
 
-        .main-content{
-            padding:40px;
-            margin-left:250px;
+        /* ================================================== */
+        /* MAIN CONTENT */
+        /* ================================================== */
+
+        .main-content {
+            padding: 40px;
+            min-height: 100vh;
         }
 
-        .top-bar{
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            margin-bottom:30px;
+        /* ================================================== */
+        /* TOP BAR */
+        /* ================================================== */
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
         }
 
-        .top-bar h1{
-            font-size:32px;
-            color:#1e293b;
+        .top-bar h1 {
+            font-size: 42px;
+            color: #1e293b;
+            font-weight: 700;
         }
 
-        .add-btn{
-            background:#2563eb;
-            color:white;
-            text-decoration:none;
-            padding:12px 20px;
-            border-radius:10px;
-            font-weight:600;
-            transition:0.3s;
+        .add-btn {
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            padding: 14px 22px;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: 0.3s ease;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
         }
 
-        .add-btn:hover{
-            background:#1d4ed8;
+        .add-btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
         }
 
-        .table-container{
-            background:white;
-            border-radius:18px;
-            overflow:hidden;
-            box-shadow:0 8px 20px rgba(0,0,0,0.08);
+        /* ================================================== */
+        /* TABLE CONTAINER */
+        /* ================================================== */
+
+        .table-container {
+            background: white;
+            border-radius: 22px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
         }
 
-        table{
-            width:100%;
-            border-collapse:collapse;
+        table {
+            width: 100%;
+            border-collapse: collapse;
         }
 
-        th{
-            background:#1e293b;
-            color:white;
-            padding:16px;
-            text-align:left;
-            font-size:14px;
+        th {
+            background: #1e293b;
+            color: white;
+            padding: 18px;
+            text-align: left;
+            font-size: 14px;
+            font-weight: 600;
         }
 
-        td{
-            padding:16px;
-            border-bottom:1px solid #e2e8f0;
-            font-size:14px;
-            color:#334155;
+        td {
+            padding: 18px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 14px;
+            color: #334155;
+            vertical-align: middle;
         }
 
-        tr:hover{
-            background:#f8fafc;
+        tr:hover {
+            background: #f8fafc;
         }
 
-        .status{
-            padding:6px 12px;
-            border-radius:20px;
-            font-size:12px;
-            font-weight:600;
+        /* ================================================== */
+        /* STATUS BADGES */
+        /* ================================================== */
+
+        .status {
+            padding: 7px 14px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 700;
+            display: inline-block;
         }
 
-        .present{
-            background:#dcfce7;
-            color:#166534;
+        .present {
+            background: #dcfce7;
+            color: #166534;
         }
 
-        .absent{
-            background:#fee2e2;
-            color:#991b1b;
+        .absent {
+            background: #fee2e2;
+            color: #991b1b;
         }
 
-        .late{
-            background:#fef3c7;
-            color:#92400e;
+        .late {
+            background: #fef3c7;
+            color: #92400e;
         }
 
-        .action-btn{
-            padding:7px 12px;
-            border-radius:8px;
-            text-decoration:none;
-            color:white;
-            font-size:13px;
-            font-weight:500;
-            margin-right:5px;
+        /* ================================================== */
+        /* ACTION BUTTONS */
+        /* ================================================== */
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
         }
 
-        .edit-btn{
-            background:#0ea5e9;
+        .action-btn {
+            padding: 8px 14px;
+            border-radius: 10px;
+            text-decoration: none;
+            color: white;
+            font-size: 13px;
+            font-weight: 600;
+            transition: 0.3s ease;
         }
 
-        .delete-btn{
-            background:#ef4444;
+        .edit-btn {
+            background: #0ea5e9;
         }
 
-        .edit-btn:hover{
-            background:#0284c7;
+        .delete-btn {
+            background: #ef4444;
         }
 
-        .delete-btn:hover{
-            background:#dc2626;
+        .edit-btn:hover {
+            background: #0284c7;
         }
 
+        .delete-btn:hover {
+            background: #dc2626;
+        }
+
+        /* ================================================== */
+        /* RESPONSIVE */
+        /* ================================================== */
+
+        @media(max-width:900px) {
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .top-bar h1 {
+                font-size: 30px;
+            }
+
+            .table-container {
+                overflow-x: auto;
+            }
+
+            table {
+                min-width: 900px;
+            }
+
+        }
     </style>
 
 </head>
 
 <body>
 
+    <div class="main-content">
 
+        <!-- TOP BAR -->
 
-<div class="main-content">
+        <div class="top-bar">
 
-    <div class="top-bar">
+            <h1>
 
-        <h1>Attendance Management</h1>
+                Attendance Management
 
-        <a href="add.php" class="add-btn">
+            </h1>
 
-            + Add Attendance
+            <a href="mark_attendance.php" class="add-btn">
+                + Mark Attendance
+            </a>
 
-        </a>
+        </div>
 
-    </div>
+        <!-- TABLE -->
 
-    <div class="table-container">
+        <div class="table-container">
 
-        <table>
-
-            <tr>
-
-                <th>ID</th>
-                <th>Student</th>
-                <th>Course</th>
-                <th>Date</th>
-                <th>Status</th>
-                <th>Recorded By</th>
-                <th>Excused</th>
-                <th>Actions</th>
-
-            </tr>
-
-            <?php while($row = $attendance->fetch_assoc()): ?>
+            <table>
 
                 <tr>
 
-                    <td>
-
-                        <?= $row['AttendanceID'] ?>
-
-                    </td>
-
-                    <td>
-
-                        <?= $row['StudentName'] ?>
-
-                    </td>
-
-                    <td>
-
-                        <?= $row['CourseName'] ?>
-
-                    </td>
-
-                    <td>
-
-                        <?= $row['AttendanceDate'] ?>
-
-                    </td>
-
-                    <td>
-
-                        <span class="status <?= strtolower($row['Status']) ?>">
-
-                            <?= $row['Status'] ?>
-
-                        </span>
-
-                    </td>
-
-                    <td>
-
-                        <?= $row['RecordedBy'] ?>
-
-                    </td>
-
-                    <td>
-
-                        <?= $row['IsExcused'] ? 'Yes' : 'No' ?>
-
-                    </td>
-
-                    <td>
-
-                        <a href="edit.php?id=<?= $row['AttendanceID'] ?>"
-                           class="action-btn edit-btn">
-
-                            Edit
-
-                        </a>
-
-                        <a href="delete.php?id=<?= $row['AttendanceID'] ?>"
-                           class="action-btn delete-btn"
-                           onclick="return confirm('Delete this attendance?')">
-
-                            Delete
-
-                        </a>
-
-                    </td>
+                    <th>ID</th>
+                    <th>Student</th>
+                    <th>Course</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Recorded By</th>
+                    <th>Excused</th>
+                    <th>Actions</th>
 
                 </tr>
 
-            <?php endwhile; ?>
+                <?php while ($row = $attendance->fetch_assoc()): ?>
 
-        </table>
+                    <tr>
+
+                        <td>
+
+                            <?= $row['AttendanceID'] ?>
+
+                        </td>
+
+                        <td>
+
+                            <?= htmlspecialchars($row['StudentName']) ?>
+
+                        </td>
+
+                        <td>
+
+                            <?= htmlspecialchars($row['CourseName']) ?>
+
+                        </td>
+
+                        <td>
+
+                            <?= htmlspecialchars($row['AttendanceDate']) ?>
+
+                        </td>
+
+                        <td>
+
+                            <span class="status <?= strtolower($row['Status']) ?>">
+
+                                <?= htmlspecialchars($row['Status']) ?>
+
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <?= htmlspecialchars($row['RecordedBy']) ?>
+
+                        </td>
+
+                        <td>
+
+                            <?= $row['IsExcused'] ? 'Yes' : 'No' ?>
+
+                        </td>
+
+                        <td>
+
+                            <div class="action-buttons">
+
+                                <a href="edit.php?id=<?= $row['AttendanceID'] ?>" class="action-btn edit-btn">
+
+                                    Edit
+
+                                </a>
+
+                                <a href="delete.php?id=<?= $row['AttendanceID'] ?>" class="action-btn delete-btn"
+                                    onclick="return confirm('Delete this attendance?')">
+
+                                    Delete
+
+                                </a>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                <?php endwhile; ?>
+
+            </table>
+
+        </div>
 
     </div>
 
-</div>
-
 </body>
+
 </html>

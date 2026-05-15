@@ -10,105 +10,37 @@ if (
 }
 
 include("../navbar.php");
-
-require_once '../database/db.php';
+require_once("../database/db.php");
 
 $db = new Database();
-
 $conn = $db->connect();
 
-/*
-|--------------------------------------------------------------------------
-| Student Session
-|--------------------------------------------------------------------------
-*/
-
-$studentID = $_SESSION['user_id'] ?? 0;
+$student_id = $_SESSION['student_id'];
 
 /*
-|--------------------------------------------------------------------------
-| Student Information
-|--------------------------------------------------------------------------
+|------------------------------------------------------------------
+| GET STUDENT DETAILS
+|------------------------------------------------------------------
 */
 
-$sql = "
-    SELECT *
-    FROM student
-    WHERE StudentID = ?
-";
-
+$sql = "SELECT * FROM student WHERE StudentID = ?";
 $stmt = $conn->prepare($sql);
-
-$stmt->bind_param("i", $studentID);
-
+$stmt->bind_param("i", $student_id);
 $stmt->execute();
 
-$student = $stmt->get_result()->fetch_assoc();
+$result = $stmt->get_result();
+$student = $result->fetch_assoc();
 
 /*
-|--------------------------------------------------------------------------
-| Total Courses
-|--------------------------------------------------------------------------
+|------------------------------------------------------------------
+| DUMMY DATA
+|------------------------------------------------------------------
 */
 
-$sql = "
-    SELECT COUNT(*) AS totalCourses
-    FROM enrollment
-    WHERE StudentID = ?
-";
-
-$stmt = $conn->prepare($sql);
-
-$stmt->bind_param("i", $studentID);
-
-$stmt->execute();
-
-$totalCourses =
-$stmt->get_result()->fetch_assoc()['totalCourses'];
-
-/*
-|--------------------------------------------------------------------------
-| Total Attendance
-|--------------------------------------------------------------------------
-*/
-
-$sql = "
-    SELECT COUNT(*) AS totalAttendance
-    FROM attendance
-    WHERE StudentID = ?
-    AND Status = 'Present'
-";
-
-$stmt = $conn->prepare($sql);
-
-$stmt->bind_param("i", $studentID);
-
-$stmt->execute();
-
-$totalAttendance =
-$stmt->get_result()->fetch_assoc()['totalAttendance'];
-
-/*
-|--------------------------------------------------------------------------
-| Total Passed Subjects
-|--------------------------------------------------------------------------
-*/
-
-$sql = "
-    SELECT COUNT(*) AS totalPassed
-    FROM grade
-    WHERE StudentID = ?
-    AND isPassed = 1
-";
-
-$stmt = $conn->prepare($sql);
-
-$stmt->bind_param("i", $studentID);
-
-$stmt->execute();
-
-$totalPassed =
-$stmt->get_result()->fetch_assoc()['totalPassed'];
+$totalCourses = 5;
+$attendance = "92%";
+$currentGrade = "A";
+$pendingAssignments = 3;
 
 ?>
 
@@ -117,344 +49,550 @@ $stmt->get_result()->fetch_assoc()['totalPassed'];
 
 <head>
 
-<meta charset="UTF-8">
-
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0"
->
-
-<title>Student Dashboard</title>
-
-<link
-href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-rel="stylesheet"
->
-
-<style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Poppins',sans-serif;
-}
-
-body{
-    background:#f1f5f9;
-}
-
-.dashboard{
-
-    margin-left:250px;
-
-    padding:40px;
-
-    min-height:100vh;
-}
-
-.welcome-card{
-
-    background:
-    linear-gradient(135deg,#2563eb,#1d4ed8);
-
-    color:white;
-
-    padding:35px;
-
-    border-radius:24px;
-
-    margin-bottom:35px;
-
-    box-shadow:
-    0 10px 25px rgba(37,99,235,0.25);
-}
-
-.welcome-card h1{
-
-    font-size:36px;
-
-    margin-bottom:10px;
-}
-
-.welcome-card p{
-
-    opacity:0.9;
-
-    font-size:16px;
-}
-
-.card-grid{
-
-    display:grid;
-
-    grid-template-columns:
-    repeat(auto-fit,minmax(240px,1fr));
-
-    gap:25px;
-
-    margin-bottom:40px;
-}
-
-.card{
-
-    background:white;
-
-    padding:28px;
-
-    border-radius:22px;
-
-    box-shadow:
-    0 6px 20px rgba(0,0,0,0.05);
-
-    transition:0.3s;
-}
-
-.card:hover{
-
-    transform:translateY(-5px);
-}
-
-.card h3{
-
-    color:#64748b;
-
-    font-size:16px;
-
-    margin-bottom:12px;
-}
-
-.card h1{
-
-    color:#1e293b;
-
-    font-size:38px;
-}
-
-.quick-links{
-
-    display:grid;
-
-    grid-template-columns:
-    repeat(auto-fit,minmax(250px,1fr));
-
-    gap:25px;
-}
-
-.link-card{
-
-    background:white;
-
-    padding:25px;
-
-    border-radius:20px;
-
-    text-decoration:none;
-
-    color:#1e293b;
-
-    box-shadow:
-    0 6px 20px rgba(0,0,0,0.05);
-
-    transition:0.3s;
-}
-
-.link-card:hover{
-
-    transform:translateY(-5px);
-
-    background:#eff6ff;
-}
-
-.link-card h2{
-
-    margin-bottom:10px;
-
-    font-size:22px;
-}
-
-.link-card p{
-
-    color:#64748b;
-
-    font-size:14px;
-
-    line-height:1.6;
-}
-
-
-
-  @media(max-width:768px){
-
-    .dashboard{
-
-        margin-left:0;
-
-        padding:20px;
-    }
-
-
-    .welcome-card h1{
-        font-size:28px;
-    }
-}
-
-</style>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Student Dashboard</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Poppins',sans-serif;
+        }
+
+        body{
+            background:#f1f5f9;
+        }
+
+        .main-content{
+            padding:40px;
+        }
+
+        /* ================================================== */
+        /* HERO */
+        /* ================================================== */
+
+        .hero{
+            background:linear-gradient(135deg,#2563eb,#1d4ed8);
+            color:white;
+            padding:40px;
+            border-radius:25px;
+            margin-bottom:30px;
+            box-shadow:0 10px 25px rgba(37,99,235,0.2);
+        }
+
+        .hero h1{
+            font-size:42px;
+            margin-bottom:10px;
+        }
+
+        .hero p{
+            font-size:17px;
+            opacity:0.95;
+        }
+
+        /* ================================================== */
+        /* STATS */
+        /* ================================================== */
+
+        .stats-grid{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+            gap:20px;
+            margin-bottom:30px;
+        }
+
+        .stat-card{
+            background:white;
+            padding:30px;
+            border-radius:20px;
+            box-shadow:0 4px 12px rgba(0,0,0,0.05);
+            transition:0.3s;
+        }
+
+        .stat-card:hover{
+            transform:translateY(-5px);
+        }
+
+        .stat-card h3{
+            font-size:15px;
+            color:#64748b;
+            margin-bottom:15px;
+        }
+
+        .stat-card h1{
+            font-size:40px;
+            color:#1e293b;
+        }
+
+        /* ================================================== */
+        /* GRID */
+        /* ================================================== */
+
+        .dashboard-grid{
+            display:grid;
+            grid-template-columns:2fr 1fr;
+            gap:25px;
+        }
+
+        .card{
+            background:white;
+            padding:30px;
+            border-radius:20px;
+            box-shadow:0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .card h2{
+            margin-bottom:20px;
+            color:#1e293b;
+        }
+
+        /* ================================================== */
+        /* TABLE */
+        /* ================================================== */
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+        }
+
+        th{
+            background:#1e293b;
+            color:white;
+            padding:15px;
+            text-align:left;
+        }
+
+        td{
+            padding:15px;
+            border-bottom:1px solid #e2e8f0;
+            color:#475569;
+        }
+
+        /* ================================================== */
+        /* COURSE CARD */
+        /* ================================================== */
+
+        .course-card{
+            border:1px solid #e2e8f0;
+            border-radius:15px;
+            padding:20px;
+            margin-bottom:15px;
+        }
+
+        .course-code{
+            display:inline-block;
+            background:#dbeafe;
+            color:#2563eb;
+            padding:6px 14px;
+            border-radius:30px;
+            font-size:13px;
+            font-weight:600;
+            margin-bottom:12px;
+        }
+
+        .course-card h3{
+            color:#1e293b;
+            margin-bottom:10px;
+        }
+
+        .course-card p{
+            color:#64748b;
+            margin-bottom:6px;
+        }
+
+        /* ================================================== */
+        /* PROFILE */
+        /* ================================================== */
+
+        .profile-info p{
+            margin-bottom:12px;
+            color:#475569;
+        }
+
+        .profile-info strong{
+            color:#1e293b;
+        }
+
+        /* ================================================== */
+        /* QUICK BUTTONS */
+        /* ================================================== */
+
+        .quick-actions{
+            display:flex;
+            flex-direction:column;
+            gap:15px;
+        }
+
+        .quick-btn{
+            display:block;
+            text-align:center;
+            background:#2563eb;
+            color:white;
+            padding:14px;
+            border-radius:12px;
+            text-decoration:none;
+            font-weight:600;
+            transition:0.3s;
+        }
+
+        .quick-btn:hover{
+            background:#1d4ed8;
+        }
+
+        /* ================================================== */
+        /* NOTIFICATIONS */
+        /* ================================================== */
+
+        .notification{
+            background:#f8fafc;
+            padding:15px;
+            border-radius:12px;
+            margin-bottom:12px;
+            border-left:5px solid #2563eb;
+        }
+
+        .notification p{
+            color:#334155;
+            font-size:14px;
+        }
+
+        @media(max-width:900px){
+
+            .dashboard-grid{
+                grid-template-columns:1fr;
+            }
+
+            .hero h1{
+                font-size:30px;
+            }
+
+        }
+
+    </style>
 
 </head>
 
 <body>
-    <?php include '../navbar.php'; ?>
 
-<div class="dashboard">
+<div class="main-content">
 
-<!-- Welcome -->
+    <!-- HERO -->
 
-<div class="welcome-card">
+    <div class="hero">
 
-<h1>
+        <h1>
 
-Welcome,
-<?= htmlspecialchars($student['StudentName']) ?>
+            Welcome,
+            <?= htmlspecialchars($student['StudentName']) ?> 👋
 
-👋
+        </h1>
 
-</h1>
+        <p>
 
-<p>
+            Track your courses, attendance, grades, and academic progress.
 
-Manage your academic activities and track your progress.
+        </p>
 
-</p>
+    </div>
 
-</div>
+    <!-- STATS -->
 
-<!-- Statistics -->
+    <div class="stats-grid">
 
-<div class="card-grid">
+        <div class="stat-card">
 
-<div class="card">
+            <h3>Total Courses</h3>
 
-<h3>Total Courses</h3>
+            <h1><?= $totalCourses ?></h1>
 
-<h1>
+        </div>
 
-<?= $totalCourses ?>
+        <div class="stat-card">
 
-</h1>
+            <h3>Attendance</h3>
 
-</div>
+            <h1><?= $attendance ?></h1>
 
-<div class="card">
+        </div>
 
-<h3>Attendance Records</h3>
+        <div class="stat-card">
 
-<h1>
+            <h3>Current Grade</h3>
 
-<?= $totalAttendance ?>
+            <h1><?= $currentGrade ?></h1>
 
-</h1>
+        </div>
 
-</div>
+        <div class="stat-card">
 
-<div class="card">
+            <h3>Assignments</h3>
 
-<h3>Passed Subjects</h3>
+            <h1><?= $pendingAssignments ?></h1>
 
-<h1>
+        </div>
 
-<?= $totalPassed ?>
+    </div>
 
-</h1>
+    <!-- GRID -->
 
-</div>
+    <div class="dashboard-grid">
 
-</div>
+        <!-- LEFT -->
 
-<!-- Quick Links -->
+        <div>
 
-<div class="quick-links">
+            <!-- CLASS SCHEDULE -->
 
-<a
-href="../04_Course_management/course_dashboard.php"
-class="link-card"
->
+            <div class="card" style="margin-bottom:25px;">
 
-<h2>
+                <h2>Today's Schedule</h2>
 
-📚 My Courses
+                <table>
 
-</h2>
+                    <tr>
 
-<p>
+                        <th>Time</th>
+                        <th>Course</th>
+                        <th>Room</th>
 
-View all enrolled courses and course details.
+                    </tr>
 
-</p>
+                    <tr>
 
-</a>
+                        <td>09:00 AM</td>
+                        <td>Programming</td>
+                        <td>A-201</td>
 
-<a
-href="../03_Attendance_management/attendance_dashboard.php"
-class="link-card"
->
+                    </tr>
 
-<h2>
+                    <tr>
 
-🗓 Attendance
+                        <td>12:00 PM</td>
+                        <td>Database Systems</td>
+                        <td>B-105</td>
 
-</h2>
+                    </tr>
 
-<p>
+                    <tr>
 
-Track your attendance records and performance.
+                        <td>03:00 PM</td>
+                        <td>Networking</td>
+                        <td>C-302</td>
 
-</p>
+                    </tr>
 
-</a>
+                </table>
 
-<a
-href="../05_Grade_management/grade_dashboard.php"
-class="link-card"
->
+            </div>
 
-<h2>
+            <!-- ENROLLED COURSES -->
 
-📊 Grades
+            <div class="card">
 
-</h2>
+                <h2>Enrolled Courses</h2>
 
-<p>
+                <div class="course-card">
 
-View your marks, grades, and academic results.
+                    <span class="course-code">
 
-</p>
+                        CS101
 
-</a>
+                    </span>
 
-<a
-href="student_profile.php"
-class="link-card"
->
+                    <h3>
 
-<h2>
+                        Introduction to Programming
 
-👤 My Profile
+                    </h3>
 
-</h2>
+                    <p>
 
-<p>
+                        <strong>Credits:</strong> 10
 
-Manage your account and personal information.
+                    </p>
 
-</p>
+                    <p>
 
-</a>
+                        <strong>Semester:</strong> Fall 2026
 
-</div>
+                    </p>
+
+                </div>
+
+                <div class="course-card">
+
+                    <span class="course-code">
+
+                        DB202
+
+                    </span>
+
+                    <h3>
+
+                        Database Systems
+
+                    </h3>
+
+                    <p>
+
+                        <strong>Credits:</strong> 5
+
+                    </p>
+
+                    <p>
+
+                        <strong>Semester:</strong> Fall 2026
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT -->
+
+        <div>
+
+            <!-- PROFILE -->
+
+            <div class="card" style="margin-bottom:25px;">
+
+                <h2>Student Profile</h2>
+
+                <div class="profile-info">
+
+                    <p>
+
+                        <strong>ID:</strong>
+
+                        <?= $student['StudentID'] ?>
+
+                    </p>
+
+                    <p>
+
+                        <strong>Name:</strong>
+
+                        <?= htmlspecialchars($student['StudentName']) ?>
+
+                    </p>
+
+                    <p>
+
+                        <strong>Email:</strong>
+
+                        <?= htmlspecialchars($student['Email']) ?>
+
+                    </p>
+
+                    <p>
+
+                        <strong>Level:</strong>
+
+                        <?= htmlspecialchars($student['Level']) ?>
+
+                    </p>
+
+                    <p>
+
+                        <strong>Status:</strong>
+
+                        <?= $student['IsActive'] ? 'Active' : 'Inactive' ?>
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- QUICK ACTIONS -->
+
+            <div class="card" style="margin-bottom:25px;">
+
+                <h2>Quick Actions</h2>
+
+                <div class="quick-actions">
+
+                    <a href="../04_course_management/course_dashboard.php" class="quick-btn">
+
+                        View Courses
+
+                    </a>
+
+                    <a href="../03_Attendance_management/attendance_dashboard.php" class="quick-btn">
+
+                        Check Attendance
+
+                    </a>
+
+                    <a href="../05_Grade_management/grade_dashboard.php" class="quick-btn">
+
+                        View Grades
+
+                    </a>
+
+                </div>
+
+            </div>
+
+            <!-- NOTIFICATIONS -->
+
+            <div class="card">
+
+                <h2>Notifications</h2>
+
+                <div class="notification">
+
+                    <p>
+
+                        Assignment submission closes tomorrow.
+
+                    </p>
+
+                </div>
+
+                <div class="notification">
+
+                    <p>
+
+                        Your attendance is above 90%.
+
+                    </p>
+
+                </div>
+
+                <div class="notification">
+
+                    <p>
+
+                        Midterm exams start next week.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
 
 </body>
-
 </html>
