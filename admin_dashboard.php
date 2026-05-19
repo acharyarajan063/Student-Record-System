@@ -236,7 +236,7 @@ $adminName = $_SESSION['user_name'] ?? 'Admin';
             <div class="panel">
                 <h3>Quick Actions</h3>
                 <a href="admin.php" class="quick-action-btn">Manage Students</a>
-                <a href="add.php" class="quick-action-btn">+ Add New Student</a>
+                <a href="01_student_management/add.php" class="quick-action-btn">+ Add New Student</a>
                 <a href="teachers.php" class="quick-action-btn">Manage Teachers</a>
                 <a href="courses.php" class="quick-action-btn">View Courses</a>
             </div>
